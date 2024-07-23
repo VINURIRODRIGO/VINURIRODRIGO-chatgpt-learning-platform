@@ -1,11 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const validator = require("validator");
 
-const userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
   email: {
     type: String,
@@ -23,17 +25,58 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
+// static signup method
+userSchema.statics.signup = async function (username, email, password, role) {
+  // validation
+  if (!username || !email || !password || !role) {
+    throw Error("All fields must be filled");
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+  if (!validator.isEmail(email)) {
+    throw Error("Email not valid");
+  }
+  if (!validator.isStrongPassword(password)) {
+    throw Error("Password not strong enough");
+  }
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  const exists = await this.findOne({ email });
+
+  if (exists) {
+    throw Error("Email already in use");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+
+  const user = await this.create({
+    username,
+    email,
+    password: hash,
+    role,
+  });
+
+  return user;
+};
+// static login method
+userSchema.statics.login = async function (email, password, role) {
+  if (!email || !password || !role) {
+    throw Error("All fields must be filled");
+  }
+
+  const user = await this.findOne({ email });
+  if (!user) {
+    throw Error("Incorrect email");
+  }
+
+  const passMatch = await bcrypt.compare(password, user.password);
+  if (!passMatch) {
+    throw Error("Incorrect password");
+  }
+
+  const roleMatch = await bcrypt.compare(role, user.role);
+  if (!roleMatch) {
+    throw Error("Incorrect role");
+  }
+  return user;
 };
 
 const User = mongoose.model("User", userSchema);

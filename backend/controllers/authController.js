@@ -1,61 +1,41 @@
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
-const asyncHandler = require("express-async-handler");
+const jwt = require("jsonwebtoken");
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
-  });
+const createToken = (_id) => {
+  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "3d" });
 };
 
-const registerUser = asyncHandler(async (req, res) => {
+// login a user
+const loginUser = async (req, res) => {
+  const { email, password, role } = req.body;
+
+  try {
+    const user = await User.login(email, password, role);
+
+    // create a token
+    const token = createToken(user._id);
+
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// signup a user
+const signupUser = async (req, res) => {
   const { username, email, password, role } = req.body;
+  console.log(username, email, password, role);
+  try {
+    const user = await User.signup(username, email, password, role);
 
-  const userExists = await User.findOne({ email });
+    // create a token
+    const token = createToken(user._id);
 
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
+    res.status(200).json({ email, token });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
+};
 
-  const user = await User.create({
-    username,
-    email,
-    password,
-    role,
-  });
-
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user data");
-  }
-});
-
-const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
-  }
-});
-
-module.exports = { registerUser, authUser };
+module.exports = { signupUser, loginUser };

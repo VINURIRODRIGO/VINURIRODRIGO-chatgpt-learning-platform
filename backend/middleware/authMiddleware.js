@@ -1,38 +1,25 @@
 const jwt = require("jsonwebtoken");
-const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
-const protect = asyncHandler(async (req, res, next) => {
-  let token;
+const requireAuth = async (req, res, next) => {
+  // verify user is authenticated
+  const { authorization } = req.headers;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      next();
-    } catch (error) {
-      res.status(401);
-      throw new Error("Not authorized, token failed");
-    }
+  if (!authorization) {
+    return res.status(401).json({ error: "Authorization token required" });
   }
 
-  if (!token) {
-    res.status(401);
-    throw new Error("Not authorized, no token");
-  }
-});
+  const token = authorization.split(" ")[1];
 
-const admin = (req, res, next) => {
-  if (req.user && req.user.role === "instructor") {
+  try {
+    const { _id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = await User.findOne({ _id }).select("_id");
     next();
-  } else {
-    res.status(401);
-    throw new Error("Not authorized as an instructor");
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ error: "Request is not authorized" });
   }
 };
 
-module.exports = { protect, admin };
+module.exports = requireAuth;

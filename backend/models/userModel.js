@@ -5,7 +5,11 @@ const validator = require("validator");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: {
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
     type: String,
     required: true,
   },
@@ -23,12 +27,23 @@ const userSchema = new Schema({
     enum: ["student", "instructor"],
     default: "student",
   },
+  teachingExperience: {
+    type: String,
+    required: function () {
+      return this.role === "instructor";
+    },
+  },
 });
 
-// static signup method
-userSchema.statics.signup = async function (username, email, password, role) {
+// static signup method for students
+userSchema.statics.signupStudent = async function (
+  firstName,
+  lastName,
+  email,
+  password
+) {
   // validation
-  if (!username || !email || !password || !role) {
+  if (!firstName || !lastName || !email || !password) {
     throw Error("All fields must be filled");
   }
   if (!validator.isEmail(email)) {
@@ -48,17 +63,58 @@ userSchema.statics.signup = async function (username, email, password, role) {
   const hash = await bcrypt.hash(password, salt);
 
   const user = await this.create({
-    username,
+    firstName,
+    lastName,
     email,
     password: hash,
-    role,
+    role: "student",
   });
 
   return user;
 };
+
+// static signup method for instructors
+userSchema.statics.signupInstructor = async function (
+  firstName,
+  lastName,
+  email,
+  password,
+  teachingExperience
+) {
+  if (!firstName || !lastName || !email || !password || !teachingExperience) {
+    throw Error("All fields must be filled");
+  }
+  if (!validator.isEmail(email)) {
+    throw Error("Email not valid");
+  }
+  if (!validator.isStrongPassword(password)) {
+    throw Error("Password not strong enough");
+  }
+
+  const exists = await this.findOne({ email });
+
+  if (exists) {
+    throw Error("Email already in use");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+
+  const user = await this.create({
+    firstName,
+    lastName,
+    email,
+    password: hash,
+    role: "instructor",
+    teachingExperience,
+  });
+
+  return user;
+};
+
 // static login method
-userSchema.statics.login = async function (email, password, role) {
-  if (!email || !password || !role) {
+userSchema.statics.login = async function (email, password) {
+  if (!email || !password) {
     throw Error("All fields must be filled");
   }
 
@@ -72,9 +128,6 @@ userSchema.statics.login = async function (email, password, role) {
     throw Error("Incorrect password");
   }
 
-  if (user.role != role) {
-    throw Error("Incorrect role");
-  }
   return user;
 };
 

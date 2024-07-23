@@ -1,30 +1,30 @@
-require("dotenv").config();
-
 const express = require("express");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/authRoutes");
 
-// express app
+// Load environment variables
+dotenv.config();
+
+// Connect to the database
+connectDB();
+
 const app = express();
 
-// middleware
+// Middleware
 app.use(express.json());
 
-// routes
-app.use("/api/auth", userRoutes);
+// Routes
+app.use("/api/auth", authRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
 
 const PORT = process.env.PORT || 5000;
 
-// connect to db
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    // listen for requests
-    app.listen(PORT, () => {
-      console.log("connected to db & listening on port", process.env.PORT);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

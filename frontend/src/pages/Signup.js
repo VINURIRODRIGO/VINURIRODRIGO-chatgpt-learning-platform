@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { login } from "../services/authService";
+import { signup } from "../services/authService";
 
-const Login = () => {
+const Signup = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
@@ -10,7 +11,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await login({ email, password, role });
+      const data = await signup({ username, email, password, role });
       console.log(data); // You can handle the response further, such as saving the token
     } catch (error) {
       setError(error.response.data.error);
@@ -19,9 +20,15 @@ const Login = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Signup</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
         <label>Email:</label>
         <input
           type="email"
@@ -39,10 +46,10 @@ const Login = () => {
           <option value="student">Student</option>
           <option value="instructor">Instructor</option>
         </select>
-        <button type="submit">Login</button>
+        <button type="submit">Signup</button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

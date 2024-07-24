@@ -5,6 +5,8 @@ const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 // Load environment variables
 dotenv.config();
 
@@ -21,10 +23,10 @@ app.use(
 );
 
 // body parser
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
-// Error handling middleware
-// app.use(errorMiddleware);
+// Cookie parser
+app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -34,6 +36,9 @@ app.use("/api", courseRoutes);
 app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message });
 });
+
+// Error handling middleware
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 

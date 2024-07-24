@@ -51,7 +51,7 @@ const enrollCourse = catchAsyncError(async (req, res, next) => {
     course.enrolledStudents.push(userId);
     await course.save();
 
-    res.status(200).json(course);
+    res.status(200).json("Successfully enroll to the course");
   } catch (error) {
     next(error);
   }
@@ -72,4 +72,25 @@ const getEnrolledCourses = catchAsyncError(async (req, res, next) => {
   }
 });
 
-module.exports = { createCourse, getCourses, enrollCourse, getEnrolledCourses };
+const getCourseById = catchAsyncError(async (req, res, next) => {
+  const courseId = req.params.id;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    res.status(200).json(course);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = {
+  createCourse,
+  getCourses,
+  enrollCourse,
+  getEnrolledCourses,
+  getCourseById,
+};

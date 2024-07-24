@@ -10,7 +10,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
-
+const userRoutes = require("./routes/userRoutes");
 // Load environment variables
 dotenv.config();
 
@@ -85,6 +85,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api", courseRoutes);
+app.use("/api", userRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

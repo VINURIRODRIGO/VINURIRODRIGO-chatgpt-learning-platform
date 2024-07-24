@@ -6,6 +6,7 @@ const {
   getCourses,
   enrollCourse,
   getEnrolledCourses,
+  getCourseById,
 } = require("../controllers/courseController");
 const requireAuth = require("../middleware/authMiddleware");
 /**
@@ -101,5 +102,5 @@ router.post("/courses", requireAuth, createCourse);
 router.get("/courses", getCourses);
 router.post("/courses/enroll", requireAuth, enrollCourse);
 router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
-
+router.get("/course/:id", requireAuth, getCourseById);
 module.exports = router;

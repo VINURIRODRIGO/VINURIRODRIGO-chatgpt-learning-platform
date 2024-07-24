@@ -16,6 +16,7 @@ const courseSchema = Schema({
     required: true,
   },
   createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  enrolledStudents: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: Date,
 });

@@ -1,4 +1,5 @@
 const Course = require("../models/courseModel");
+const User = require("../models/userModel");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
 // Create a course
@@ -33,4 +34,42 @@ const getCourses = catchAsyncError(async (req, res, next) => {
   }
 });
 
-module.exports = { createCourse, getCourses };
+// Enroll a student in a course
+const enrollCourse = catchAsyncError(async (req, res, next) => {
+  const { courseId } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return next("Course not found");
+    }
+    if (course.enrolledStudents.includes(userId)) {
+      return next("Already enrolled in this course");
+    }
+
+    course.enrolledStudents.push(userId);
+    await course.save();
+
+    res.status(200).json(course);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Fetch enrolled courses for a student
+const getEnrolledCourses = catchAsyncError(async (req, res, next) => {
+  const userId = req.user._id;
+
+  try {
+    const courses = await Course.find({ enrolledStudents: userId }).populate(
+      "createdBy",
+      "firstName lastName"
+    );
+    res.status(200).json(courses);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = { createCourse, getCourses, enrollCourse, getEnrolledCourses };

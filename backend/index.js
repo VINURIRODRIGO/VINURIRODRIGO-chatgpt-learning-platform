@@ -8,6 +8,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 // Load environment variables
 dotenv.config();
@@ -17,18 +19,33 @@ connectDB();
 
 const app = express();
 
-// Enable CORS => cross Origin resource sharing
-app.use(
-  cors({
-    origin: process.env.ORIGIN,
-  })
-);
+const corsOptions = {
+  origin: "http://localhost:3000",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
+// Enable CORS => cross Origin resource sharing
+app.use(cors(corsOptions));
+
+// Enable pre-flight for all routes
+app.options("*", cors(corsOptions));
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again later.",
+});
+
+app.use(limiter);
 // body parser
 app.use(express.json({ limit: "50mb" }));
 
 // Cookie parser
 app.use(cookieParser());
+
+// Middleware for handling errors
+app.use(helmet());
 
 // Swagger configuration
 const swaggerOptions = {

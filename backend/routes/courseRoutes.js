@@ -1,4 +1,13 @@
 // courseRoutes.js
+const express = require("express");
+const router = express.Router();
+const {
+  createCourse,
+  getCourses,
+  enrollCourse,
+  getEnrolledCourses,
+} = require("../controllers/courseController");
+const requireAuth = require("../middleware/authMiddleware");
 /**
  * @swagger
  * tags:
@@ -27,6 +36,10 @@
  *                 type: string
  *               image:
  *                 type: string
+ *               videos:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *     responses:
  *       201:
  *         description: Course created
@@ -41,6 +54,10 @@
  *                   type: string
  *                 image:
  *                   type: string
+ *                 videos:
+ *                   type: array
+ *                   items:
+ *                     type: string
  *                 createdBy:
  *                   type: string
  *       400:
@@ -69,19 +86,20 @@
  *                     type: string
  *                   image:
  *                     type: string
+ *                   videos:
+ *                     type: array
+ *                     items:
+ *                       type: string
  *                   createdBy:
  *                     type: string
  *       400:
  *         description: Error in fetching courses
  */
 
-const express = require("express");
-const router = express.Router();
-const { createCourse, getCourses } = require("../controllers/courseController");
-const requireAuth = require("../middleware/authMiddleware");
-
 // Use requireAuth middleware to protect routes
 router.post("/courses", requireAuth, createCourse);
 router.get("/courses", getCourses);
+router.post("/courses/enroll", requireAuth, enrollCourse);
+router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
 
 module.exports = router;

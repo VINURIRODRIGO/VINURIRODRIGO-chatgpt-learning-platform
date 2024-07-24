@@ -49,6 +49,7 @@ const {
   signupStudent,
   signupInstructor,
 } = require("../controllers/authController");
+const { body } = require("express-validator");
 
 // login route
 router.post("/login", loginUser);
@@ -93,8 +94,49 @@ router.post("/login", loginUser);
  */
 
 // signup routes
-router.post("/signup/student", signupStudent);
-router.post("/signup/instructor", signupInstructor);
+router.post(
+  "/signup/student",
+  [
+    body("firstName")
+      .notEmpty()
+      .withMessage("First name is required")
+      .matches(/^[A-Za-z]+$/)
+      .withMessage("First name can only contain letters"),
+    body("lastName")
+      .notEmpty()
+      .withMessage("Last name is required")
+      .matches(/^[A-Za-z]+$/)
+      .withMessage("Last name can only contain letters"),
+    body("email").isEmail().withMessage("Please provide a valid email"),
+    body("password")
+      .isStrongPassword()
+      .withMessage("Password is not strong enough"),
+  ],
+  signupStudent
+);
+router.post(
+  "/signup/instructor",
+  [
+    body("firstName")
+      .notEmpty()
+      .withMessage("First name is required")
+      .matches(/^[A-Za-z]+$/)
+      .withMessage("First name can only contain letters"),
+    body("lastName")
+      .notEmpty()
+      .withMessage("Last name is required")
+      .matches(/^[A-Za-z]+$/)
+      .withMessage("Last name can only contain letters"),
+    body("email").isEmail().withMessage("Please provide a valid email"),
+    body("password")
+      .isStrongPassword()
+      .withMessage("Password is not strong enough"),
+    body("teachingExperience")
+      .notEmpty()
+      .withMessage("Teaching experience is required"),
+  ],
+  signupInstructor
+);
 
 // unknown routes
 

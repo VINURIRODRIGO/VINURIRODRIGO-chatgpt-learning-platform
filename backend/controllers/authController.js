@@ -1,13 +1,15 @@
 // const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
+// Create a token for a user
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "3d" });
 };
 
 // login a user
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -18,12 +20,12 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({ email, token, role: user.role });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the next middleware
   }
 };
 
 // signup a student
-const signupStudent = async (req, res) => {
+const signupStudent = catchAsyncError(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
   try {
     const user = await User.signupStudent(firstName, lastName, email, password);
@@ -33,12 +35,12 @@ const signupStudent = async (req, res) => {
 
     res.status(200).json({ email, token, role: user.role });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the next middleware
   }
-};
+});
 
 // signup an instructor
-const signupInstructor = async (req, res) => {
+const signupInstructor = catchAsyncError(async (req, res, next) => {
   const { firstName, lastName, email, password, teachingExperience } = req.body;
 
   try {
@@ -55,8 +57,8 @@ const signupInstructor = async (req, res) => {
 
     res.status(200).json({ email, token, role: user.role });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the next middleware
   }
-};
+});
 
 module.exports = { signupStudent, signupInstructor, loginUser };

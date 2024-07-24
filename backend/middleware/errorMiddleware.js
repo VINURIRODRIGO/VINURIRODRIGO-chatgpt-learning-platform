@@ -29,7 +29,7 @@ const ErrorMiddleware = (err, req, res) => {
     err = new customErrorHandler(message, 401);
   }
 
-  response.status(err.statusCode).json({
+  res.status(err.statusCode).json({
     success: false,
     message: err.message,
   });

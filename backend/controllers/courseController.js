@@ -1,8 +1,8 @@
 const Course = require("../models/courseModel");
-const User = require("../models/userModel"); // Ensure you have User model exported from userModel.js
+const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
 // Create a course
-const createCourse = async (req, res) => {
+const createCourse = catchAsyncError(async (req, res, next) => {
   const { title, description, image } = req.body;
   const userId = req.user._id;
 
@@ -16,12 +16,12 @@ const createCourse = async (req, res) => {
 
     res.status(201).json(course);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the next middleware
   }
-};
+});
 
 // Fetch all courses and populate createdBy
-const getCourses = async (req, res) => {
+const getCourses = catchAsyncError(async (req, res, next) => {
   try {
     const courses = await Course.find().populate(
       "createdBy",
@@ -29,8 +29,8 @@ const getCourses = async (req, res) => {
     );
     res.status(200).json(courses);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error); // Pass the error to the next middleware
   }
-};
+});
 
 module.exports = { createCourse, getCourses };

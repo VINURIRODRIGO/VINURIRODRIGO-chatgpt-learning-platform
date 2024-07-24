@@ -1,9 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const mongoose = require("mongoose");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-
+const courseRoutes = require("./routes/courseRoutes");
+const errorMiddleware = require("./middleware/errorMiddleware");
+const cors = require("cors");
 // Load environment variables
 dotenv.config();
 
@@ -12,11 +13,22 @@ connectDB();
 
 const app = express();
 
-// Middleware
+// Enable CORS => cross Origin resource sharing
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+  })
+);
+
+// body parser
 app.use(express.json());
+
+// Error handling middleware
+// app.use(errorMiddleware);
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api", courseRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,23 +1,25 @@
-const express = require("express");
-const router = express.Router();
-const {
-  getCourses,
-  getCourseById,
-  createCourse,
-  updateCourse,
-  deleteCourse,
-} = require("../controllers/courseController");
-const { protect, admin } = require("../middleware/authMiddleware");
+const mongoose = require("mongoose");
 
-router
-  .route("/")
-  .get(getCourses) // Ensure getCourses is defined and imported correctly
-  .post(protect, admin, createCourse); // Ensure createCourse is defined and imported correctly
+const Schema = mongoose.Schema;
 
-router
-  .route("/:id")
-  .get(getCourseById) // Ensure getCourseById is defined and imported correctly
-  .put(protect, admin, updateCourse) // Ensure updateCourse is defined and imported correctly
-  .delete(protect, admin, deleteCourse); // Ensure deleteCourse is defined and imported correctly
+const courseSchema = Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: Date,
+});
 
-module.exports = router;
+const Course = mongoose.model("Course", courseSchema);
+
+module.exports = Course;

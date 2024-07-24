@@ -2,20 +2,36 @@ import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import StudentSignup from "./pages/StudentSignup";
+import InstructorSignup from "./pages/InstructorSignup";
+import HomePage from "./pages/HomePage";
+import InstructorCoursesPage from "./pages/InstructorCoursesPage";
+import StudentCoursesPage from "./pages/StudentCoursesPage";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <div>Hello world!</div>,
+    path: "/home",
+    element: <HomePage />,
   },
   {
-    path: "/login",
+    path: "/student/signup",
+    element: <StudentSignup />,
+  },
+  {
+    path: "/",
     element: <Login />,
   },
   {
-    path: "/signup",
-    element: <Signup />,
+    path: "instructor/course",
+    element: <InstructorCoursesPage />,
+  },
+  {
+    path: "student/course",
+    element: <StudentCoursesPage />,
+  },
+  {
+    path: "instructor/signup",
+    element: <InstructorSignup />,
   },
 ]);
 function App() {

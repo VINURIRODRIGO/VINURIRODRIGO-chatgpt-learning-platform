@@ -1,86 +1,36 @@
-const asyncHandler = require("express-async-handler");
 const Course = require("../models/courseModel");
+const User = require("../models/userModel"); // Ensure you have User model exported from userModel.js
 
-// @desc    Get all courses
-// @route   GET /api/courses
-// @access  Public
-const getCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find({});
-  res.json(courses);
-});
+// Create a course
+const createCourse = async (req, res) => {
+  const { title, description, image } = req.body;
+  const userId = req.user._id;
 
-// @desc    Get course by ID
-// @route   GET /api/courses/:id
-// @access  Public
-const getCourseById = asyncHandler(async (req, res) => {
-  const course = await Course.findById(req.params.id);
+  try {
+    const course = await Course.create({
+      title,
+      description,
+      image,
+      createdBy: userId,
+    });
 
-  if (course) {
-    res.json(course);
-  } else {
-    res.status(404);
-    throw new Error("Course not found");
+    res.status(201).json(course);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-});
-
-// @desc    Create a course
-// @route   POST /api/courses
-// @access  Private/Admin
-const createCourse = asyncHandler(async (req, res) => {
-  const { title, description, instructor, price } = req.body;
-
-  const course = new Course({
-    title,
-    description,
-    instructor,
-    price,
-  });
-
-  const createdCourse = await course.save();
-  res.status(201).json(createdCourse);
-});
-
-// @desc    Update a course
-// @route   PUT /api/courses/:id
-// @access  Private/Admin
-const updateCourse = asyncHandler(async (req, res) => {
-  const { title, description, instructor, price } = req.body;
-
-  const course = await Course.findById(req.params.id);
-
-  if (course) {
-    course.title = title || course.title;
-    course.description = description || course.description;
-    course.instructor = instructor || course.instructor;
-    course.price = price || course.price;
-
-    const updatedCourse = await course.save();
-    res.json(updatedCourse);
-  } else {
-    res.status(404);
-    throw new Error("Course not found");
-  }
-});
-
-// @desc    Delete a course
-// @route   DELETE /api/courses/:id
-// @access  Private/Admin
-const deleteCourse = asyncHandler(async (req, res) => {
-  const course = await Course.findById(req.params.id);
-
-  if (course) {
-    await course.remove();
-    res.json({ message: "Course removed" });
-  } else {
-    res.status(404);
-    throw new Error("Course not found");
-  }
-});
-
-module.exports = {
-  getCourses,
-  getCourseById,
-  createCourse,
-  updateCourse,
-  deleteCourse,
 };
+
+// Fetch all courses and populate createdBy
+const getCourses = async (req, res) => {
+  try {
+    const courses = await Course.find().populate(
+      "createdBy",
+      "firstName lastName"
+    );
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { createCourse, getCourses };

@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { chatWithGPT } = require("../controllers/chatController");
-const { protect } = require("../middleware/authMiddleware");
+const { createCourse, getCourses } = require("../controllers/courseController");
+const requireAuth = require("../middleware/authMiddleware");
 
-router.post("/", protect, chatWithGPT);
+// Use requireAuth middleware to protect routes
+router.post("/courses", requireAuth, createCourse);
+router.get("/courses", getCourses);
 
 module.exports = router;

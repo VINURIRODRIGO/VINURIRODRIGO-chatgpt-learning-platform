@@ -10,6 +10,9 @@ const requireAuth = async (req, res, next) => {
   }
 
   const token = authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "Authorization token is malformed" });
+  }
 
   try {
     const { _id } = jwt.verify(token, process.env.JWT_SECRET);
@@ -17,6 +20,7 @@ const requireAuth = async (req, res, next) => {
     req.user = await User.findOne({ _id }).select("_id");
     next();
   } catch (error) {
+    console.log("Id is: " + token);
     console.log(error);
     res.status(401).json({ error: "Request is not authorized" });
   }

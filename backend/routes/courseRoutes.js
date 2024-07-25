@@ -11,7 +11,6 @@ const {
   updateCourse,
 } = require("../controllers/courseController");
 const requireAuth = require("../middleware/authMiddleware");
-
 /**
  * @swagger
  * components:
@@ -26,6 +25,7 @@ const requireAuth = require("../middleware/authMiddleware");
  *       required:
  *         - title
  *         - description
+ *         - image
  *       properties:
  *         id:
  *           type: string
@@ -65,7 +65,7 @@ const requireAuth = require("../middleware/authMiddleware");
 
 /**
  * @swagger
- * /courses:
+ * /api/courses:
  *   post:
  *     summary: Create a new course
  *     tags: [Courses]
@@ -76,14 +76,35 @@ const requireAuth = require("../middleware/authMiddleware");
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Course'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: The title of the course
+ *               description:
+ *                 type: string
+ *                 example: The description of the course
+ *               image:
+ *                 type: string
+ *                 example: http://example.com
  *     responses:
  *       201:
  *         description: The course was successfully created
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Course'
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 description:
+ *                   type: string
+ *                 image:
+ *                   type: string
+ *       403:
+ *         description: Access denied. Only instructors can create courses.
  *       500:
  *         description: Some server error
  */
@@ -92,7 +113,7 @@ router.post("/courses", requireAuth, createCourse);
 
 /**
  * @swagger
- * /courses:
+ * /api/courses:
  *   get:
  *     summary: Returns the list of all the courses
  *     tags: [Courses]
@@ -110,7 +131,7 @@ router.get("/courses", getCourses);
 
 /**
  * @swagger
- * /courses/enroll:
+ * /api/courses/enroll:
  *   post:
  *     summary: Enroll a student in a course
  *     tags: [Courses]
@@ -140,7 +161,7 @@ router.post("/courses/enroll", requireAuth, enrollCourse);
 
 /**
  * @swagger
- * /courses/enrolled:
+ * /api/courses/enrolled:
  *   get:
  *     summary: Get all courses enrolled by a student
  *     tags: [Courses]
@@ -160,7 +181,7 @@ router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
 
 /**
  * @swagger
- * /course/{id}:
+ * /api/course/{id}:
  *   get:
  *     summary: Get a course by id
  *     tags: [Courses]
@@ -187,7 +208,7 @@ router.get("/course/:id", requireAuth, getCourseById);
 
 /**
  * @swagger
- * /courses/instructor/{id}:
+ * /api/courses/instructor/{id}:
  *   get:
  *     summary: Get all courses created by a specific instructor
  *     tags: [Courses]
@@ -216,7 +237,7 @@ router.get("/courses/instructor/:id", requireAuth, getCoursesByInstructor);
 
 /**
  * @swagger
- * /courses/{id}:
+ * api/courses/{id}:
  *   put:
  *     summary: Update a course by id
  *     tags: [Courses]
@@ -234,18 +255,30 @@ router.get("/courses/instructor/:id", requireAuth, getCoursesByInstructor);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Course'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Updated title
+ *               description:
+ *                 type: string
+ *                 example: Updated description
+ *               image:
+ *                 type: string
+ *                 example: Updated image URL
  *     responses:
  *       200:
- *         description: The course was updated
+ *         description: The course was successfully updated
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Course'
  *       403:
- *         description: You are not authorized to update this course
+ *         description: Access denied. Only the instructor who created the course can update it.
  *       404:
  *         description: The course was not found
+ *       500:
+ *         description: Some server error
  */
 router.put("/courses/:id", requireAuth, updateCourse);
 

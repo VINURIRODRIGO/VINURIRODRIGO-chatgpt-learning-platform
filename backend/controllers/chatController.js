@@ -1,14 +1,14 @@
 const { Configuration, OpenAI } = require("openai");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
+const dotenv = require("dotenv");
+const Course = require("../models/courseModel");
+// Load environment variables
+dotenv.config();
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai = new OpenAI({
-  organization: "org-3hbLi07WFd9CmUUiyxOd0eit",
-  project: "proj_MIchTOa8IdAnBJ8fG91hXxm7",
-});;
 
 const sendMessage = catchAsyncError(async (req, res, next) => {
   const { message } = req.body;
@@ -16,7 +16,6 @@ const sendMessage = catchAsyncError(async (req, res, next) => {
   try {
     // Query the database for relevant courses
     const courses = await Course.find();
-
     // Generate a summary of courses
     const courseList = courses
       .map((course) => `${course.title}: ${course.description}`)
@@ -30,8 +29,8 @@ const sendMessage = catchAsyncError(async (req, res, next) => {
       Based on the user's query, suggest relevant courses.
     `;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
     });
 

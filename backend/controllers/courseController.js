@@ -6,7 +6,6 @@ const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 const createCourse = catchAsyncError(async (req, res, next) => {
   const { title, description, image } = req.body;
   const userId = req.user._id;
-
   try {
     const course = await Course.create({
       title,

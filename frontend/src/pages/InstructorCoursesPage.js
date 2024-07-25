@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addCourse, displayInstructorCourses } from "../services/authService";
+import { addCourse, displayInstructorCourses } from "../services/courseService";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import Button from "../components/Button";

@@ -4,15 +4,18 @@ import Input from "../components/Input";
 import Dropdown from "../components/Dropdown";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
-import { signup } from "../services/authService";
+import { instructorSignup } from "../services/authService";
 import usePasswordValidation from "../hooks/usePasswordValidation";
+import { useNavigate } from "react-router-dom";
 
 const InstructorSignup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    role: "Less than year",
+    email: "",
+    teachingExperience: "Less than 1 year",
   });
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const {
@@ -31,8 +34,8 @@ const InstructorSignup = () => {
     }));
   };
 
-  const roles = [
-    { value: "Less than year", label: "Less than year" },
+  const experience = [
+    { value: "Less than 1 year", label: "Less than 1 year" },
     { value: "1 to 3 years", label: "1 to 3 years" },
     { value: "3 to 5 years", label: "3 to 5 years" },
     { value: "5 to 10 years", label: "5 to 10 years" },
@@ -45,21 +48,26 @@ const InstructorSignup = () => {
       role: selectedRole,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     if (password !== confirmPassword) {
+      setLoading(false);
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      const data = await signup({
+      const data = await instructorSignup({
         firstName: formData.firstName,
         lastName: formData.lastName,
+        email: formData.email,
         password,
-        role: formData.role,
+        teachingExperience: formData.teachingExperience,
       });
       console.log(data);
+      navigate("instructor/course", { replace: true });
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred.");
     } finally {
@@ -90,6 +98,13 @@ const InstructorSignup = () => {
                 onChange={handleChange}
               />
               <Input
+                label="Email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <Input
                 label="Password"
                 type="password"
                 name="password"
@@ -105,8 +120,8 @@ const InstructorSignup = () => {
               />
               <Dropdown
                 label="Role"
-                options={roles}
-                selectedOption={formData.role}
+                options={experience}
+                selectedOption={formData.teachingExperience}
                 onSelect={handleRoleChange}
               />
               {passwordMismatch && (

@@ -14,6 +14,50 @@ const requireAuth = require("../middleware/authMiddleware");
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     Course:
+ *       type: object
+ *       required:
+ *         - title
+ *         - description
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the course
+ *         title:
+ *           type: string
+ *           description: The title of the course
+ *         description:
+ *           type: string
+ *           description: The description of the course
+ *         image:
+ *           type: string
+ *           description: The image URL of the course
+ *         createdBy:
+ *           type: string
+ *           description: The id of the instructor who created the course
+ *         enrolledStudents:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The ids of the students enrolled in the course
+ *       example:
+ *         id: 60f8c74b3f1b2a3b9c8b4567
+ *         title: "Learn Node.js"
+ *         description: "A comprehensive Node.js course"
+ *         image: "https://example.com/image.png"
+ *         createdBy: "60f8c74b3f1b2a3b9c8b4567"
+ *         enrolledStudents: ["60f8c74b3f1b2a3b9c8b4567"]
+ */
+
+/**
+ * @swagger
  * tags:
  *   name: Courses
  *   description: The courses managing API

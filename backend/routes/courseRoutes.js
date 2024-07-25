@@ -11,6 +11,8 @@ const {
   updateCourse,
 } = require("../controllers/courseController");
 const requireAuth = require("../middleware/authMiddleware");
+const { checkRole } = require("../middleware/roleMiddleware");
+
 /**
  * @swagger
  * components:
@@ -109,7 +111,7 @@ const requireAuth = require("../middleware/authMiddleware");
  *         description: Some server error
  */
 // Use requireAuth middleware to protect routes
-router.post("/courses", requireAuth, createCourse);
+router.post("/courses", requireAuth, checkRole(["instructor"]), createCourse);
 
 /**
  * @swagger
@@ -127,7 +129,7 @@ router.post("/courses", requireAuth, createCourse);
  *               items:
  *                 $ref: '#/components/schemas/Course'
  */
-router.get("/courses", getCourses);
+router.get("/courses", requireAuth, checkRole(["student"]), getCourses);
 
 /**
  * @swagger
@@ -157,7 +159,12 @@ router.get("/courses", getCourses);
  *       500:
  *         description: Some server error
  */
-router.post("/courses/enroll", requireAuth, enrollCourse);
+router.post(
+  "/courses/enroll",
+  requireAuth,
+  checkRole(["student"]),
+  enrollCourse
+);
 
 /**
  * @swagger
@@ -177,7 +184,12 @@ router.post("/courses/enroll", requireAuth, enrollCourse);
  *               items:
  *                 $ref: '#/components/schemas/Course'
  */
-router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
+router.get(
+  "/courses/enrolled",
+  requireAuth,
+  checkRole(["student"]),
+  getEnrolledCourses
+);
 
 /**
  * @swagger
@@ -204,7 +216,12 @@ router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
  *       404:
  *         description: The course was not found
  */
-router.get("/course/:id", requireAuth, getCourseById);
+router.get(
+  "/course/:id",
+  requireAuth,
+  checkRole(["instructor", "student"]),
+  getCourseById
+);
 
 /**
  * @swagger
@@ -233,7 +250,12 @@ router.get("/course/:id", requireAuth, getCourseById);
  *       404:
  *         description: No courses found for this instructor
  */
-router.get("/courses/instructor/:id", requireAuth, getCoursesByInstructor);
+router.get(
+  "/courses/instructor/:id",
+  requireAuth,
+  checkRole(["instructor"]),
+  getCoursesByInstructor
+);
 
 /**
  * @swagger
@@ -280,6 +302,11 @@ router.get("/courses/instructor/:id", requireAuth, getCoursesByInstructor);
  *       500:
  *         description: Some server error
  */
-router.put("/courses/:id", requireAuth, updateCourse);
+router.put(
+  "/courses/:id",
+  requireAuth,
+  checkRole(["instructor"]),
+  updateCourse
+);
 
 module.exports = router;

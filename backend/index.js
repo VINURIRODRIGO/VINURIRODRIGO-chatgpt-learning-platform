@@ -86,6 +86,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/api/auth", authRoutes);
 app.use("/api", courseRoutes);
 app.use("/api", userRoutes);
+// app.use("/api", chatRoutes); 
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

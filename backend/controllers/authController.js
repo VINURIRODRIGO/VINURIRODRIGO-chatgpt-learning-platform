@@ -1,4 +1,3 @@
-// const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");

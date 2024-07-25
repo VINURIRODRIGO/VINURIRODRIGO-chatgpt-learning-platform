@@ -1,4 +1,11 @@
-// authRoutes.js
+const express = require("express");
+const router = express.Router();
+const {
+  loginUser,
+  signupStudent,
+  signupInstructor,
+} = require("../controllers/authController");
+const { body } = require("express-validator");
 /**
  * @swagger
  * tags:
@@ -33,6 +40,8 @@
  *             schema:
  *               type: object
  *               properties:
+ *                 id:
+ *                   type: string
  *                 email:
  *                   type: string
  *                 token:
@@ -42,14 +51,6 @@
  *       400:
  *         description: Invalid email or password
  */
-const express = require("express");
-const router = express.Router();
-const {
-  loginUser,
-  signupStudent,
-  signupInstructor,
-} = require("../controllers/authController");
-const { body } = require("express-validator");
 
 // login route
 router.post("/login", loginUser);
@@ -92,7 +93,6 @@ router.post("/login", loginUser);
  *       400:
  *         description: Error in signup
  */
-
 // signup routes
 router.post(
   "/signup/student",
@@ -114,6 +114,47 @@ router.post(
   ],
   signupStudent
 );
+
+/**
+ * @swagger
+ * /api/auth/signup/instructor:
+ *   post:
+ *     summary: Signup an instructor
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               teachingExperience:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully signed up
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 email:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *       400:
+ *         description: Error in signup
+ */
 router.post(
   "/signup/instructor",
   [

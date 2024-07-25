@@ -1,30 +1,46 @@
-const axios = require("axios");
-const asyncHandler = require("express-async-handler");
+const { Configuration, OpenAI } = require("openai");
+const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
-const chatWithGPT = asyncHandler(async (req, res) => {
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAI({
+  organization: "org-3hbLi07WFd9CmUUiyxOd0eit",
+  project: "proj_MIchTOa8IdAnBJ8fG91hXxm7",
+});;
+
+const sendMessage = catchAsyncError(async (req, res, next) => {
   const { message } = req.body;
 
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/engines/davinci-codex/completions",
-      {
-        prompt: message,
-        max_tokens: 150,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-      }
-    );
+    // Query the database for relevant courses
+    const courses = await Course.find();
 
-    res.json({ response: response.data.choices[0].text });
+    // Generate a summary of courses
+    const courseList = courses
+      .map((course) => `${course.title}: ${course.description}`)
+      .join("\n");
+
+    // Include the course information in the ChatGPT prompt
+    const prompt = `
+      The user asked: "${message}"
+      Here are some available courses:
+      ${courseList}
+      Based on the user's query, suggest relevant courses.
+    `;
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const reply = response.data.choices[0].message.content;
+
+    res.status(200).json({ reply });
   } catch (error) {
-    console.error("ChatGPT error", error);
-    res.status(500).send("Error communicating with ChatGPT");
+    next(error); // Pass the error to the error handling middleware
   }
 });
 
-module.exports = {
-  chatWithGPT,
-};
+module.exports = { sendMessage };

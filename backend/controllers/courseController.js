@@ -109,6 +109,38 @@ const getCoursesByInstructor = async (req, res, next) => {
   }
 };
 
+const updateCourse = catchAsyncError(async (req, res, next) => {
+  const { id } = req.params;
+  const { title, description, image } = req.body;
+  const userId = req.user._id;
+
+  try {
+    // Find the course by id
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    // Check if the logged-in user is the instructor who created the course
+    if (course.createdBy._id.toString() !== userId.toString()) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to update this course" });
+    }
+
+    // Update course details
+    course.title = title || course.title;
+    course.description = description || course.description;
+    course.image = image || course.image;
+
+    await course.save();
+
+    res.status(200).json(course);
+  } catch (error) {
+    next(error); // Pass the error to the next middleware
+  }
+});
+
 module.exports = {
   createCourse,
   getCourses,
@@ -116,4 +148,5 @@ module.exports = {
   getEnrolledCourses,
   getCourseById,
   getCoursesByInstructor,
+  updateCourse,
 };

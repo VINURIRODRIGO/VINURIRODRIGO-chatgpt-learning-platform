@@ -18,7 +18,7 @@ const loginUser = async (req, res, next) => {
     // create a token
     const token = createToken(user._id);
 
-    res.status(200).json({ email, token, role: user.role });
+    res.status(200).json({ id: user._id, email, token, role: user.role });
   } catch (error) {
     next(error); // Pass the error to the next middleware
   }

@@ -7,6 +7,7 @@ const {
   enrollCourse,
   getEnrolledCourses,
   getCourseById,
+  getCoursesByInstructor,
 } = require("../controllers/courseController");
 const requireAuth = require("../middleware/authMiddleware");
 /**
@@ -96,11 +97,40 @@ const requireAuth = require("../middleware/authMiddleware");
  *       400:
  *         description: Error in fetching courses
  */
-
+/**
+ * @swagger
+ * /api/courses/instructor/{id}:
+ *   get:
+ *     summary: Get all courses created by a specific instructor
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Instructor ID
+ *     responses:
+ *       200:
+ *         description: List of courses created by the instructor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Course'
+ *       404:
+ *         description: No courses found for this instructor
+ *       400:
+ *         description: Error in fetching courses
+ */
 // Use requireAuth middleware to protect routes
 router.post("/courses", requireAuth, createCourse);
 router.get("/courses", getCourses);
 router.post("/courses/enroll", requireAuth, enrollCourse);
 router.get("/courses/enrolled", requireAuth, getEnrolledCourses);
 router.get("/course/:id", requireAuth, getCourseById);
+router.get("/courses/instructor/:id", requireAuth, getCoursesByInstructor);
 module.exports = router;

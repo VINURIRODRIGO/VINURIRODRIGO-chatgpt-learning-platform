@@ -87,10 +87,33 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// Fetch all courses created by a specific instructor
+const getCoursesByInstructor = async (req, res, next) => {
+  const instructorId = req.params.id;
+
+  try {
+    const courses = await Course.find({ createdBy: instructorId }).populate(
+      "createdBy",
+      "firstName lastName email"
+    );
+
+    if (!courses.length) {
+      return res
+        .status(404)
+        .json({ error: "No courses found for this instructor" });
+    }
+
+    res.status(200).json(courses);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createCourse,
   getCourses,
   enrollCourse,
   getEnrolledCourses,
   getCourseById,
+  getCoursesByInstructor,
 };

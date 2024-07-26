@@ -1,12 +1,13 @@
 import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Login from "./pages/Login";
-import StudentSignup from "./pages/StudentSignup";
-import InstructorSignup from "./pages/InstructorSignup";
+import Login from "./pages/LoginPage";
+import StudentSignup from "./pages/StudentSignupPage";
+import InstructorSignup from "./pages/InstructorSignupPage";
 import InstructorCoursesPage from "./pages/InstructorCoursesPage";
 import StudentCoursesPage from "./pages/StudentCoursesPage";
 import EnrolledCoursesDisplayPage from "./pages/EnrolledCoursesDisplayPage";
+import StudentEnrollDetailsPage from "./pages/StudentEnrollDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "instructor/signup",
     element: <InstructorSignup />,
+  },
+  {
+    path: "instructor/student-enroll-details",
+    element: <StudentEnrollDetailsPage />,
   },
 ]);
 function App() {

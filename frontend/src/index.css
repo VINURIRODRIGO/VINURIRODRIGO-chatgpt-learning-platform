@@ -87,7 +87,6 @@ body {
   background-color: #0056b3;
 }
 
-
 .button {
   padding: 10px 20px;
   border: none;
@@ -217,33 +216,84 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
   background-color: #333;
-  padding: 1rem;
-  width: 100%;
-  box-sizing: border-box;
+  color: #fff;
 }
 
-
-.navbar-brand a {
+.navbar a {
   color: #fff;
   text-decoration: none;
-  font-size: 1.5rem;
+  margin-right: 20px;
 }
 
 .navbar-links {
-  list-style: none;
   display: flex;
-  gap: 1rem;
+  list-style: none;
 }
 
-.navbar-links li a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
+.navbar-links li {
+  margin-right: 20px;
+  position: relative;
 }
 
-.navbar-links li a:hover {
-  text-decoration: underline;
+.username {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.username-container {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+}
+
+.dropdown-item:hover {
+  background-color: #c2c2c2;
+}
+
+.logout-dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.logout-dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  width: 100px;
+  text-align: left;
+  background: none;
+  border: none;
+}
+
+.logout-dropdown-item:hover {
+  background-color: #f1f1f1;
 }
 
 .logout-button {
@@ -270,7 +320,7 @@ body {
   margin: 60px;
 }
 
-.edit-button {
+.enroll-button {
   background-color: #28a745;
   border: none;
   color: white;
@@ -280,11 +330,26 @@ body {
   border-radius: 6px;
 }
 
-.edit-button:hover {
+.enroll-button:hover {
   background-color: #218838;
 }
 
-.delete-button {
+
+/* Disabled button styling */
+.enroll-button:disabled {
+  background-color: #d6d6d6;
+  /* Light gray */
+  color: #a8a8a8;
+  /* Darker gray text */
+  cursor: not-allowed;
+}
+
+.enroll-button:disabled:hover {
+  background-color: #d6d6d6;
+  /* Ensure the background color remains unchanged */
+}
+
+/* .delete-button {
   background-color: #dc3545;
   border: none;
   color: white;
@@ -297,7 +362,7 @@ body {
 
 .delete-button:hover {
   background-color: #c82333;
-}
+} */
 
 .button-center .button {
   margin: 0 5px;
@@ -321,7 +386,6 @@ body {
 .page-container {
   background: linear-gradient(135deg, #ffffff 0%, #b4b0af 99%, #af9e99 100%);
   min-height: 100vh;
-  /* Ensure it covers the entire viewport height */
   display: flex;
   flex-direction: column
 }
@@ -329,7 +393,6 @@ body {
 .link-text {
   color: blue;
   cursor: pointer;
-
 }
 
 .link-text:hover {
@@ -496,4 +559,86 @@ h1 {
   justify-content: center;
   align-items: center;
   font-size: 30px;
+}
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.alert-success {
+  background-color: #4caf50;
+}
+
+.alert-error {
+  background-color: #f44336;
+}
+
+.alert-warning {
+  background-color: #ff9800;
+}
+
+.alert-info {
+  background-color: #2196f3;
+}
+
+.alert-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.course-row {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 16px;
+  max-width: 800px;
+  margin: 16px auto;
+  /* Centering the row */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.course-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.course-image {
+  width: 150px;
+  height: auto;
+  margin-right: 16px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+h2 {
+  flex-grow: 1;
+  margin: 0 16px;
+  font-size: 1.5em;
+}
+
+.enrolled-count {
+  cursor: pointer;
+}
+
+.student-list {
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+  margin-top: 8px;
+  padding-left: 16px;
 }

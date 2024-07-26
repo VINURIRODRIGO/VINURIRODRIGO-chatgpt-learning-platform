@@ -1,15 +1,22 @@
-import React from 'react';
-import { Link, useNavigate   } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../index.css';
 
 const Navbar = () => {
-    const history = useNavigate();
+  const navigate = useNavigate();
+  const firstName = localStorage.getItem("firstName");
+  const lastName = localStorage.getItem("lastName");
+  const [dropdownVisible, setDropdownVisible] = useState(false);
 
-    const handleLogout = () => {
-      // Perform the logout logic, e.g., clearing tokens, making API call, etc.
-      localStorage.removeItem('authToken'); //Remove auth token from localStorage
-      history.push('/login');
-    };
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -17,16 +24,18 @@ const Navbar = () => {
       </div>
       <ul className="navbar-links">
         <li>
-          <Link to="/">Home</Link>
+          <Link to="instructor/courses">Home</Link>
         </li>
         <li>
           <Link to="/courses">Courses</Link>
         </li>
-        <li>
-          <Link to="/users">Users</Link>
-        </li>
-        <li>
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
+        <li className="username-container">
+          <span className="username" onClick={toggleDropdown}>{`${firstName} ${lastName}`}</span>
+          {dropdownVisible && (
+            <div className="logout-dropdown">
+              <button className="logout-dropdown-item" onClick={handleLogout}>Logout</button>
+            </div>
+          )}
         </li>
       </ul>
     </nav>

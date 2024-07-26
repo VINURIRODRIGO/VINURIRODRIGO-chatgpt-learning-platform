@@ -1,41 +1,37 @@
-import React from "react";
-import Table from "../components/Table";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import { displayEnrolledCourses } from "../services/authService";
+import Table from "../components/Table";
+import { displayStudentCourses } from "../services/courseService";
 
 const EnrolledCoursesDisplayPage = () => {
-  const courses = [
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Introduction to Programming",
-      instructor: "John Doe",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Advanced Data Structures",
-      instructor: "Jane Smith",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Machine Learning Basics",
-      instructor: "Jim Brown",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Introduction to Programming",
-      instructor: "John Doe",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Advanced Data Structures",
-      instructor: "Jane Smith",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      name: "Machine Learning Basics",
-      instructor: "Jim Brown",
-    },
-  ];
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchEnrolledCourses = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+          throw new Error("User ID not found in local storage.");
+        }
+
+        const allCourses = await displayStudentCourses();
+        const filteredCourses = allCourses.filter((course) =>
+          course.enrolledStudents.includes(userId)
+        );
+
+        setCourses(filteredCourses);
+        setLoading(false);
+      } catch (error) {
+        setError("Failed to fetch enrolled courses. Please try again.");
+        setLoading(false);
+      }
+    };
+
+    fetchEnrolledCourses();
+  }, []);
+
   const columns = [
     {
       header: "Course Image",
@@ -46,11 +42,16 @@ const EnrolledCoursesDisplayPage = () => {
     },
     {
       header: "Course Name",
-      accessor: "name",
+      accessor: "title",
     },
     {
       header: "Instructor",
-      accessor: "instructor",
+      accessor: "createdBy",
+      render: (createdBy) => (
+        <span>
+          {createdBy.firstName} {createdBy.lastName}
+        </span>
+      ),
     },
   ];
 
@@ -59,7 +60,13 @@ const EnrolledCoursesDisplayPage = () => {
       <Navbar />
       <div className="selected-courses-page">
         <h1>Selected Courses</h1>
-        <Table data={courses} columns={columns} />
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <Table data={courses} columns={columns} />
+        )}
       </div>
     </div>
   );

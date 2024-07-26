@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import Input from "../components/Input";
+import Dropdown from "../components/Dropdown";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
-import { studentSignup } from "../services/authService";
+import { instructorSignup } from "../services/authService";
 import usePasswordValidation from "../hooks/usePasswordValidation";
+import { useNavigate } from "react-router-dom";
 
-const StudentSignup = () => {
+const InstructorSignupPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    teachingExperience: "Less than 1 year",
   });
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const {
     password,
     confirmPassword,
@@ -32,6 +34,21 @@ const StudentSignup = () => {
     }));
   };
 
+  const experience = [
+    { value: "Less than 1 year", label: "Less than 1 year" },
+    { value: "1 to 3 years", label: "1 to 3 years" },
+    { value: "3 to 5 years", label: "3 to 5 years" },
+    { value: "5 to 10 years", label: "5 to 10 years" },
+    { value: "More than 10 years", label: "More than 10 years" },
+  ];
+
+  const handleRoleChange = (selectedRole) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      role: selectedRole,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -42,14 +59,15 @@ const StudentSignup = () => {
     }
 
     try {
-      const data = await studentSignup({
+      const data = await instructorSignup({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: password,
+        password,
+        teachingExperience: formData.teachingExperience,
       });
       console.log(data);
-      navigate("/student/signup", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred.");
     } finally {
@@ -100,6 +118,12 @@ const StudentSignup = () => {
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
               />
+              <Dropdown
+                label="Role"
+                options={experience}
+                selectedOption={formData.teachingExperience}
+                onSelect={handleRoleChange}
+              />
               {passwordMismatch && (
                 <p className="error-message">{passwordMismatch}</p>
               )}
@@ -115,4 +139,4 @@ const StudentSignup = () => {
   );
 };
 
-export default StudentSignup;
+export default InstructorSignupPage;

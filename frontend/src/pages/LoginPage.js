@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import Loading from "../components/Loading";
 import { login as loginService } from "../services/authService";
 
-const Login = () => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -101,4 +101,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

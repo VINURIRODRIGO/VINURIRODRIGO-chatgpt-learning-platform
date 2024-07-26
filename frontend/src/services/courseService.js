@@ -7,20 +7,14 @@ const addCourse = (userData) => {
   return new Promise((resolve, reject) => {
     axios({
       method: "post",
-      url: ` ${API_URL}/courses`,
+      url: `${API_URL}/courses`,
       data: userData,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(function (response) {
-        console.log(response);
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
   });
 };
 
@@ -35,31 +29,79 @@ const displayInstructorCourses = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then(function (response) {
-        console.log(response);
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
   });
 };
-const displayEnrolledCourses = () => {
-  const userId = localStorage.getItem("userId");
+
+const displayAllCourses = () => {
+  const token = localStorage.getItem("token");
   return new Promise((resolve, reject) => {
     axios({
       method: "get",
-      url: `${API_URL}/courses/instructor/${userId}`,
+      url: `${API_URL}/courses`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(function (response) {
-        console.log(response);
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
   });
 };
-export { addCourse, displayInstructorCourses, displayEnrolledCourses };
+
+const editCourseDetails = (courseId, courseData) => {
+  const token = localStorage.getItem("token");
+  return new Promise((resolve, reject) => {
+    axios({
+      method: "put",
+      url: `${API_URL}/courses/${courseId}`,
+      data: courseData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
+  });
+};
+
+const enrollCourse = (courseId) => {
+  const token = localStorage.getItem("token");
+  return new Promise((resolve, reject) => {
+    axios({
+      method: "post",
+      url: `${API_URL}/courses/enroll,
+      data: courseId`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
+  });
+};
+
+const displayStudentCourses = (courseId) => {
+  const token = localStorage.getItem("token");
+  return new Promise((resolve, reject) => {
+    axios({
+      method: "get",
+      url: `${API_URL}/courses/enrolled`,
+      data: courseId,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => resolve(response.data))
+      .catch((error) => reject(error.response.data.message || error.message));
+  });
+};
+
+export {
+  addCourse,
+  displayInstructorCourses,
+  displayStudentCourses,
+  displayAllCourses,
+  editCourseDetails,
+  enrollCourse,
+};

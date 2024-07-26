@@ -10,7 +10,6 @@ const studentSignup = (userData) => {
       data: userData,
     })
       .then(function (response) {
-        console.log(response);
         resolve(response.data);
       })
       .catch(function (error) {
@@ -28,7 +27,6 @@ const instructorSignup = async (userData) => {
       data: userData,
     })
       .then(function (response) {
-        console.log(response);
         resolve(response.data);
       })
       .catch(function (error) {
@@ -46,7 +44,6 @@ const login = async (userData) => {
       data: userData,
     })
       .then(function (response) {
-        console.log(response);
         resolve(response.data);
       })
       .catch(function (error) {
@@ -55,8 +52,9 @@ const login = async (userData) => {
       });
   });
 };
+
 export {
   studentSignup,
   login,
-  instructorSignup
+  instructorSignup,
 };

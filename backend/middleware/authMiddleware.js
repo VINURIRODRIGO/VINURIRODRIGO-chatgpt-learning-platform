@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
+const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
-const requireAuth = async (req, res, next) => {
+const requireAuth = catchAsyncError(async (req, res, next) => {
   // verify user is authenticated
   const { authorization } = req.headers;
 
@@ -22,7 +23,8 @@ const requireAuth = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({ error: "Request is not authorized" });
+    ErrorMiddleware("Request is not authorized", 401);
   }
-};
+});
 
 module.exports = requireAuth;

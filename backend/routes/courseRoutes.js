@@ -259,7 +259,7 @@ router.get(
 
 /**
  * @swagger
- * api/courses/{id}:
+ * /api/courses/{id}:
  *   put:
  *     summary: Update a course by id
  *     tags: [Courses]

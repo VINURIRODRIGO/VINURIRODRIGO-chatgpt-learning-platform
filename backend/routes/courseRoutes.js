@@ -225,19 +225,12 @@ router.get(
 
 /**
  * @swagger
- * /api/courses/instructor/{id}:
+ * /api/courses/instructor/:
  *   get:
  *     summary: Get all courses created by a specific instructor
  *     tags: [Courses]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The instructor id
  *     responses:
  *       200:
  *         description: The list of courses created by the instructor
@@ -251,7 +244,7 @@ router.get(
  *         description: No courses found for this instructor
  */
 router.get(
-  "/courses/instructor/:id",
+  "/courses/instructor",
   requireAuth,
   checkRole(["instructor"]),
   getCoursesByInstructor

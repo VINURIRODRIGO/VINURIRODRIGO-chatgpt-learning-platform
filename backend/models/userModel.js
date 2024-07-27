@@ -57,7 +57,10 @@ userSchema.statics.signupStudent = async function (
   const exists = await this.findOne({ email });
 
   if (exists) {
-    throw new CustomErrorHandler("Email already in use", 400);
+    throw new CustomErrorHandler(
+      "Email already exists. Use a different email or log in.",
+      400
+    );
   }
 
   const salt = await bcrypt.genSalt(10);

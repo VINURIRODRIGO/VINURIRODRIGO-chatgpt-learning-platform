@@ -168,12 +168,19 @@ router.post(
 
 /**
  * @swagger
- * /api/courses/enrolled:
+ * /api/courses/enrolled/{id}:
  *   get:
- *     summary: Get all courses enrolled by a student
+ *     summary: Get all courses enrolled by a specific student
  *     tags: [Courses]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the student whose enrolled courses are to be retrieved
  *     responses:
  *       200:
  *         description: The list of enrolled courses
@@ -183,9 +190,13 @@ router.post(
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Course'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.get(
-  "/courses/enrolled",
+  "/courses/enrolled/:id",
   requireAuth,
   checkRole(["student"]),
   getEnrolledCourses
@@ -225,12 +236,19 @@ router.get(
 
 /**
  * @swagger
- * /api/courses/instructor/:
+ * /api/courses/instructor/{id}:
  *   get:
  *     summary: Get all courses created by a specific instructor
  *     tags: [Courses]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the instructor whose courses are to be retrieved
  *     responses:
  *       200:
  *         description: The list of courses created by the instructor
@@ -242,9 +260,13 @@ router.get(
  *                 $ref: '#/components/schemas/Course'
  *       404:
  *         description: No courses found for this instructor
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 router.get(
-  "/courses/instructor",
+  "/courses/instructor/:id",
   requireAuth,
   checkRole(["instructor"]),
   getCoursesByInstructor

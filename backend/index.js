@@ -60,7 +60,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `${process.env.DOC}`,
+        url: `${process.env.PORT}`,
       },
     ],
     components: {

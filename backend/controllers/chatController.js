@@ -41,8 +41,12 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
       messages: [{ role: "user", content: [{ type: "text", text: prompt }] }],
     });
     apiRequestCount += 1;
- 
-    const reply = response.choices[0].message.content;
+
+    // Clean the response
+    const reply = response.choices[0].message.content
+      .replace(/```json|```/g, "")
+      .trim();
+
     // Send the reply directly without additional JSON wrapping
     res.status(200).send(reply);
   } catch (error) {

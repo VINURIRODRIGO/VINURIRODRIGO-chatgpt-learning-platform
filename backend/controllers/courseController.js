@@ -91,7 +91,6 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
 // Fetch all courses created by a specific instructor
 const getCoursesByInstructor = catchAsyncError(async (req, res, next) => {
   const instructorId = req.params.id;
-  console.log(instructorId);
   try {
     const courses = await Course.find({ createdBy: instructorId }).populate(
       "createdBy",

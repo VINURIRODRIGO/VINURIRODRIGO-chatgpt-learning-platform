@@ -90,6 +90,13 @@ app.use("/api", courseRoutes);
 app.use("/api", userRoutes);
 app.use("/api", chatRoutes);
 
+// Handle wrong API paths
+app.all("*", (req, res, next) => {
+  const err = new Error(`Cannot find ${req.originalUrl} on this server!`);
+  err.status = 404;
+  next(err);
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   errorMiddleware(err, req, res);

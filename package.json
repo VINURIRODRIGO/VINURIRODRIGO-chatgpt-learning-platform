@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "cd frontend && npm start",
-    "server": "cd backend && npm start",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "install-client": "cd client && npm install",
+    "build-client": "cd frontend && npm start",
+    "install-server": "cd backend && npm install",
+    "start-server": "cd backend && npm start",
+    "start-client": "cd client && npm run start"
   },
   "keywords": [],
   "author": "",

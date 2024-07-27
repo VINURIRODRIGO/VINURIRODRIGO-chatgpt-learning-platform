@@ -82,7 +82,7 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
       return next(new CustomErrorHandler("Course not found", 404));
     }
 
-    res.status(200).json(course);
+    res.status(200).json({ course: course, firstName: req.user.firstName });
   } catch (error) {
     next(error);
   }

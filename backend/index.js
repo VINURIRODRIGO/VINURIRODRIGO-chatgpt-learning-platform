@@ -30,7 +30,7 @@ const app = express();
 // Enable CORS => cross Origin resource sharing
 app.use(cors());
 
-// // Enable pre-flight for all routes
+// Enable pre-flight for all routes
 // app.options("*", cors(corsOptions));
 
 const limiter = rateLimit({
@@ -60,7 +60,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `https://chatgpt-learning-platform-server.vercel.app`,
+        url: `http://localhost:${process.env.PORT}`,
       },
     ],
     components: {

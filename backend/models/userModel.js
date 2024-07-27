@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
+const CustomErrorHandler = require("../utils/customErrorHandler");
 
 const Schema = mongoose.Schema;
 
@@ -44,19 +45,19 @@ userSchema.statics.signupStudent = async function (
 ) {
   // validation
   if (!firstName || !lastName || !email || !password) {
-    throw Error("All fields must be filled");
+    throw new CustomErrorHandler("All fields must be filled", 400);
   }
   if (!validator.isEmail(email)) {
-    throw Error("Email not valid");
+    throw new CustomErrorHandler("Email not valid", 400);
   }
   if (!validator.isStrongPassword(password)) {
-    throw Error("Password not strong enough");
+    throw new CustomErrorHandler("Password not strong enough", 400);
   }
 
   const exists = await this.findOne({ email });
 
   if (exists) {
-    throw Error("Email already in use");
+    throw new CustomErrorHandler("Email already in use", 400);
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -82,19 +83,19 @@ userSchema.statics.signupInstructor = async function (
   teachingExperience
 ) {
   if (!firstName || !lastName || !email || !password || !teachingExperience) {
-    throw Error("All fields must be filled");
+    throw new CustomErrorHandler("All fields must be filled", 400);
   }
   if (!validator.isEmail(email)) {
-    throw Error("Email not valid");
+    throw new CustomErrorHandler("Email not valid", 400);
   }
   if (!validator.isStrongPassword(password)) {
-    throw Error("Password not strong enough");
+    throw new CustomErrorHandler("Password not strong enough", 400);
   }
 
   const exists = await this.findOne({ email });
 
   if (exists) {
-    throw Error("Email already in use");
+    throw new CustomErrorHandler("Email already in use", 400);
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -115,17 +116,17 @@ userSchema.statics.signupInstructor = async function (
 // static login method
 userSchema.statics.login = async function (email, password) {
   if (!email || !password) {
-    throw Error("All fields must be filled");
+    throw new CustomErrorHandler("All fields must be filled", 400);
   }
 
   const user = await this.findOne({ email });
   if (!user) {
-    throw Error("Incorrect email");
+    throw new CustomErrorHandler("Incorrect email or password", 400);
   }
 
   const passMatch = await bcrypt.compare(password, user.password);
   if (!passMatch) {
-    throw Error("Incorrect password");
+    throw new CustomErrorHandler("Incorrect email or password", 400);
   }
 
   return user;

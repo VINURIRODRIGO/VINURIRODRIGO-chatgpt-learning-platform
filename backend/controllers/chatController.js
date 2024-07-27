@@ -1,7 +1,9 @@
 const { OpenAI } = require("openai");
-const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 const dotenv = require("dotenv");
 const Course = require("../models/courseModel");
+const CustomErrorHandler = require("../utils/customErrorHandler");
+const CatchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
+
 // Load environment variables
 dotenv.config();
 
@@ -9,9 +11,13 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const sendMessage = catchAsyncError(async (req, res, next) => {
-  const { message } = req.body;
+let apiRequestCount = 0;
 
+const sendMessage = CatchAsyncError(async (req, res, next) => {
+  const { message } = req.body;
+  if (apiRequestCount >= 250) {
+    return next(new CustomErrorHandler("API request limit reached", 429));
+  }
   try {
     // Query the database for relevant courses
     const courses = await Course.find();
@@ -34,10 +40,11 @@ const sendMessage = catchAsyncError(async (req, res, next) => {
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: [{ type: "text", text: prompt }] }],
     });
+    apiRequestCount += 1;
     console.log(response);
-    // const reply = response.choices[0].message.content;
-
-    res.status(200).json({ response });
+    const reply = response.choices[0].message.content;
+    // Send the reply directly without additional JSON wrapping
+    res.status(200).send(reply);
   } catch (error) {
     next(error); // Pass the error to the error handling middleware
   }

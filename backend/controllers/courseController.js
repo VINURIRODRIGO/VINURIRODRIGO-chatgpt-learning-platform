@@ -97,11 +97,11 @@ const getCoursesByInstructor = catchAsyncError(async (req, res, next) => {
       "firstName lastName email"
     );
 
-    if (!courses.length) {
-      return next(
-        new CustomErrorHandler("No courses found for this instructor", 404)
-      );
-    }
+    // if (!courses.length) {
+    //   return next(
+    //     new CustomErrorHandler("No courses found for this instructor", 404)
+    //   );
+    // }
 
     res.status(200).json(courses);
   } catch (error) {

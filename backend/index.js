@@ -21,17 +21,17 @@ connectDB();
 
 const app = express();
 
-const corsOptions = {
-  origin: process.env.ORIGIN,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: process.env.ORIGIN,
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
 // Enable CORS => cross Origin resource sharing
-app.use(cors(corsOptions));
+app.use(cors());
 
-// Enable pre-flight for all routes
-app.options("*", cors(corsOptions));
+// // Enable pre-flight for all routes
+// app.options("*", cors(corsOptions));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -60,7 +60,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `${process.env.PORT}`,
+        url: `https://chatgpt-learning-platform-server.vercel.app`,
       },
     ],
     components: {

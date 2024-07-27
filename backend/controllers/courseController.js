@@ -60,6 +60,7 @@ const enrollCourse = catchAsyncError(async (req, res, next) => {
 
 // Fetch enrolled courses for a student
 const getEnrolledCourses = catchAsyncError(async (req, res, next) => {
+  console.log("I am getting");
   const userId = req.params.id;
 
   try {
@@ -81,8 +82,11 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
     if (!course) {
       return next(new CustomErrorHandler("Course not found", 404));
     }
-
-    res.status(200).json({ course: course, firstName: req.user.firstName });
+    const user = await User.findById(course.createdBy).select(
+      "firstName lastName"
+    );
+    console.log(user);
+    res.status(200).json({ courseDetails: course, userDetails: user });
   } catch (error) {
     next(error);
   }
@@ -96,12 +100,6 @@ const getCoursesByInstructor = catchAsyncError(async (req, res, next) => {
       "createdBy",
       "firstName lastName email"
     );
-
-    // if (!courses.length) {
-    //   return next(
-    //     new CustomErrorHandler("No courses found for this instructor", 404)
-    //   );
-    // }
 
     res.status(200).json(courses);
   } catch (error) {

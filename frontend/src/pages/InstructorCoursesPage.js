@@ -59,7 +59,7 @@ const InstructorCoursesPage = () => {
           setCourses(coursesData);
           setShouldFetchCourses(false);
         } catch (error) {
-          setError("Error fetching courses. Please try again.");
+          setError(error || "Error fetching courses. Please try again.");
           setTimeout(() => setError(""), 3000);
         }
       };

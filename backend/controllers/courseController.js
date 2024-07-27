@@ -1,7 +1,7 @@
 const Course = require("../models/courseModel");
 const User = require("../models/userModel");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
-
+const CustomErrorHandler = require("../utils/customErrorHandler");
 // Create a course
 const createCourse = catchAsyncError(async (req, res, next) => {
   const { title, description, image } = req.body;
@@ -41,10 +41,12 @@ const enrollCourse = catchAsyncError(async (req, res, next) => {
   try {
     const course = await Course.findById(courseId);
     if (!course) {
-      return next("Course not found");
+      return next(new customErrorHandler("Course not found", 404));
     }
     if (course.enrolledStudents.includes(userId)) {
-      return next("Already enrolled in this course");
+      return next(
+        new CustomErrorHandler("Already enrolled in this course", 400)
+      );
     }
 
     course.enrolledStudents.push(userId);
@@ -77,7 +79,7 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
   try {
     const course = await Course.findById(courseId);
     if (!course) {
-      return res.status(404).json({ error: "Course not found" });
+      return next(new CustomErrorHandler("Course not found", 404));
     }
 
     res.status(200).json(course);
@@ -87,7 +89,7 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
 });
 
 // Fetch all courses created by a specific instructor
-const getCoursesByInstructor = async (req, res, next) => {
+const getCoursesByInstructor = catchAsyncError(async (req, res, next) => {
   const instructorId = req.user._id;
 
   try {
@@ -97,16 +99,16 @@ const getCoursesByInstructor = async (req, res, next) => {
     );
 
     if (!courses.length) {
-      return res
-        .status(404)
-        .json({ error: "No courses found for this instructor" });
+      return next(
+        new CustomErrorHandler("No courses found for this instructor", 404)
+      );
     }
 
     res.status(200).json(courses);
   } catch (error) {
     next(error);
   }
-};
+});
 
 const updateCourse = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
@@ -117,14 +119,17 @@ const updateCourse = catchAsyncError(async (req, res, next) => {
     // Find the course by id
     const course = await Course.findById(id);
     if (!course) {
-      return res.status(404).json({ error: "Course not found" });
+      return next(new CustomErrorHandler("Course not found", 404));
     }
 
     // Check if the logged-in user is the instructor who created the course
     if (course.createdBy._id.toString() !== userId.toString()) {
-      return res
-        .status(403)
-        .json({ error: "You are not authorized to update this course" });
+      return next(
+        new CustomErrorHandler(
+          "You are not authorized to update this course",
+          403
+        )
+      );
     }
 
     // Update course details

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Table from "../components/Table";
+import Loading from "../components/Loading";
+import Alert from "../components/Alert";
 import { displayStudentCourses } from "../services/courseService";
 
 const EnrolledCoursesDisplayPage = () => {
@@ -24,8 +26,9 @@ const EnrolledCoursesDisplayPage = () => {
         setCourses(filteredCourses);
         setLoading(false);
       } catch (error) {
-        setError("Failed to fetch enrolled courses. Please try again.");
+        setError(error);
         setLoading(false);
+        setTimeout(() => setError(""), 3000);
       }
     };
 
@@ -61,9 +64,9 @@ const EnrolledCoursesDisplayPage = () => {
       <div className="selected-courses-page">
         <h1>Selected Courses</h1>
         {loading ? (
-          <p>Loading...</p>
+          <Loading />
         ) : error ? (
-          <p>{error}</p>
+          <Alert message={error} type="error" onClose={() => setError("")} />
         ) : (
           <Table data={courses} columns={columns} />
         )}

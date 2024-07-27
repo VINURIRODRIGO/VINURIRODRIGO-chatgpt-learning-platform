@@ -13,8 +13,14 @@ const addCourse = (userData) => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error.response?.data || error.message);
+        reject(error.response?.data || error.message);
+      });
   });
 };
 
@@ -29,8 +35,14 @@ const displayInstructorCourses = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error.response?.data || error.message);
+        reject(error.response?.data || error.message);
+      });
   });
 };
 
@@ -44,8 +56,17 @@ const displayAllCourses = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "API Error:",
+          error.response?.data?.error || error.message
+        );
+        reject(error.response?.data?.error || error.message);
+      });
   });
 };
 
@@ -60,8 +81,17 @@ const editCourseDetails = (courseId, courseData) => {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "API Error:",
+          error.response?.data?.error || error.message
+        );
+        reject(error.response?.data?.error || error.message);
+      });
   });
 };
 
@@ -70,30 +100,47 @@ const enrollCourse = (courseId) => {
   return new Promise((resolve, reject) => {
     axios({
       method: "post",
-      url: `${API_URL}/courses/enroll,
-      data: courseId`,
+      url: `${API_URL}/courses/enroll`,
+      data: { courseId },
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "API Error:",
+          error.response?.data?.error || error.message
+        );
+        reject(error.response?.data?.error || error.message);
+      });
   });
 };
 
-const displayStudentCourses = (courseId) => {
+const displayStudentCourses = () => {
   const token = localStorage.getItem("token");
   return new Promise((resolve, reject) => {
     axios({
       method: "get",
       url: `${API_URL}/courses/enrolled`,
-      data: courseId,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => resolve(response.data))
-      .catch((error) => reject(error.response.data.message || error.message));
+      .then((response) => {
+        console.log("API Response:", response.data);
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "API Error:",
+          error.response?.data?.error || error.message
+        );
+        reject(error.response?.data?.error || error.message);
+      });
   });
 };
 

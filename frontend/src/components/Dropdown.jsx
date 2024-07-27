@@ -3,7 +3,7 @@ import '../index.css';
 
 const Dropdown = ({ options, selectedOption, onSelect, label }) => {
   return (
-    <div className="dropdown">
+    <div className="form-dropdown">
       {label && <label className="dropdown-label">{label}</label>}
       <select 
         value={selectedOption} 

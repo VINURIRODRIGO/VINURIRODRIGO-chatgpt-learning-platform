@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../components/Card";
 import Input from "../components/Input";
 import Dropdown from "../components/Dropdown";
 import Button from "../components/Button";
 import Loading from "../components/Loading";
+import Alert from "../components/Alert";
 import { instructorSignup } from "../services/authService";
 import usePasswordValidation from "../hooks/usePasswordValidation";
 import { useNavigate } from "react-router-dom";
@@ -45,18 +46,31 @@ const InstructorSignupPage = () => {
   const handleRoleChange = (selectedRole) => {
     setFormData((prevData) => ({
       ...prevData,
-      role: selectedRole,
+      teachingExperience: selectedRole,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    if (password !== confirmPassword) {
-      setLoading(false);
-      setError("Passwords do not match");
+    setError("");
+
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !password ||
+      !confirmPassword
+    ) {
+      setError("All fields are required.");
       return;
     }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const data = await instructorSignup({
@@ -69,11 +83,21 @@ const InstructorSignupPage = () => {
       console.log(data);
       navigate("/", { replace: true });
     } catch (error) {
-      setError(error.response?.data?.error || "An error occurred.");
+      setError(error.response?.data?.message || "An error occurred.");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <div className="signin-container">
@@ -119,18 +143,28 @@ const InstructorSignupPage = () => {
                 onChange={handleConfirmPasswordChange}
               />
               <Dropdown
-                label="Role"
+                label="Teaching Experience"
                 options={experience}
                 selectedOption={formData.teachingExperience}
                 onSelect={handleRoleChange}
               />
               {passwordMismatch && (
-                <p className="error-message">{passwordMismatch}</p>
+                <Alert
+                  message={passwordMismatch}
+                  type="error"
+                  onClose={() => {}}
+                />
               )}
               <div className="button-center">
                 <Button type="submit">Sign Up</Button>
               </div>
-              {error && <p className="error-message">{error}</p>}
+              {error && (
+                <Alert
+                  message={error}
+                  type="error"
+                  onClose={() => setError("")}
+                />
+              )}
             </form>
           </Card>
         </div>

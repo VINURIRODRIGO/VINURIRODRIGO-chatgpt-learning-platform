@@ -28,6 +28,16 @@ const StudentEnrollDetailsPage = () => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <div className="page-container">
       <Navbar />
@@ -37,7 +47,7 @@ const StudentEnrollDetailsPage = () => {
       )}
       <div className="course-list">
         {loading ? (
-          <Loading /> // Use the Loading component
+          <Loading />
         ) : (
           courses.map((course, index) => (
             <CourseRow key={index} course={course} />

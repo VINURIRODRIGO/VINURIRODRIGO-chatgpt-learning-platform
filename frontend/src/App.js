@@ -1,8 +1,8 @@
 import * as React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Login from "./pages/LoginPage";
-import StudentSignup from "./pages/StudentSignupPage";
+import LoginPage from "./pages/LoginPage";
+import StudentSignupPage from "./pages/StudentSignupPage";
 import InstructorSignup from "./pages/InstructorSignupPage";
 import InstructorCoursesPage from "./pages/InstructorCoursesPage";
 import StudentCoursesPage from "./pages/StudentCoursesPage";
@@ -16,11 +16,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/student/signup",
-    element: <StudentSignup />,
+    element: <StudentSignupPage />,
   },
   {
     path: "/",
-    element: <Login />,
+    element: <LoginPage />,
   },
   {
     path: "instructor/course",

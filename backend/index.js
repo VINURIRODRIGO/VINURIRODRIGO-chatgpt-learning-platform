@@ -93,7 +93,6 @@ app.use("/api", chatRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   errorMiddleware(err, req, res);
-  // res.status(500).json({ error: err.message });
 });
 
 // Error handling middleware

@@ -15,9 +15,12 @@ const sendMessage = catchAsyncError(async (req, res, next) => {
   try {
     // Query the database for relevant courses
     const courses = await Course.find();
-    // Generate a summary of courses
+    // Generate a summary of courses with IDs
     const courseList = courses
-      .map((course) => `${course.title}: ${course.description}`)
+      .map(
+        (course) =>
+          `ID: ${course._id}, Title: ${course.title}, Description: ${course.description}`
+      )
       .join("\n");
 
     // Include the course information in the ChatGPT prompt
@@ -25,15 +28,16 @@ const sendMessage = catchAsyncError(async (req, res, next) => {
       The user asked: "${message}"
       Here are some available courses:
       ${courseList}
-      Based on the user's query, suggest relevant courses.
+       Based on the user's query, suggest only the relevant courses including  course._id, course.title, course.description as a Json format.
     `;
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: [{ type: "text", text: prompt }] }],
     });
-    const reply = response.choices[0].message.content;
+    console.log(response);
+    // const reply = response.choices[0].message.content;
 
-    res.status(200).json({ reply });
+    res.status(200).json({ response });
   } catch (error) {
     next(error); // Pass the error to the error handling middleware
   }

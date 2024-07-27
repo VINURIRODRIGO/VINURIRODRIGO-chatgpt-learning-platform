@@ -1,6 +1,6 @@
 // userController.js
 const User = require("../models/userModel");
-const customErrorHandler = require("../utils/customErrorHandler");
+const CustomErrorHandler = require("../utils/customErrorHandler");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
 // Fetch user details by ID
@@ -10,7 +10,7 @@ const getUserById = catchAsyncError(async (req, res, next) => {
   try {
     const user = await User.findById(userId).select("-password");
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return next(new CustomErrorHandler("User not found", 404));
     }
 
     res.status(200).json(user);

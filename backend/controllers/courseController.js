@@ -60,7 +60,6 @@ const enrollCourse = catchAsyncError(async (req, res, next) => {
 
 // Fetch enrolled courses for a student
 const getEnrolledCourses = catchAsyncError(async (req, res, next) => {
-  console.log("I am getting");
   const userId = req.params.id;
 
   try {
@@ -85,7 +84,6 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
     const user = await User.findById(course.createdBy).select(
       "firstName lastName"
     );
-    console.log(user);
     res.status(200).json({ courseDetails: course, userDetails: user });
   } catch (error) {
     next(error);

@@ -50,39 +50,47 @@ app.use(cookieParser());
 app.use(helmet());
 
 // Swagger configuration
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Learning Platform API",
-      version: "1.0.0",
-      description: "API documentation for the Learning Platform",
-    },
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT}`,
-      },
-    ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+// const swaggerOptions = {
+//   swaggerDefinition: {
+//     openapi: "3.0.0",
+//     info: {
+//       title: "Learning Platform API",
+//       version: "1.0.0",
+//       description: "API documentation for the Learning Platform",
+//     },
+//     servers: [
+//       {
+//         url: `http://localhost:${process.env.PORT}`,
+//       },
+//     ],
+//     components: {
+//       securitySchemes: {
+//         bearerAuth: {
+//           type: "http",
+//           scheme: "bearer",
+//           bearerFormat: "JWT",
+//         },
+//       },
+//     },
+//     security: [
+//       {
+//         bearerAuth: [],
+//       },
+//     ],
+//   },
+//   apis: ["./routes/*.js", "./models/*.js"], // Path to the API docs
+// };
+const swaggerDocs = swaggerUi.setup(null, {
+  swaggerOptions: {
+    url: "/swaggerhub/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0",
   },
-  apis: ["./routes/*.js", "./models/*.js"], // Path to the API docs
-};
-
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+});
+// const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(null, { swaggerOptions: { url: swaggerDocs } })
+);
 
 // Routes
 app.use("/api/auth", authRoutes);

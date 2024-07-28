@@ -34,7 +34,7 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
       The user asked: "${message}"
       Here are some available courses:
       ${courseList}
-       Based on the user's query, suggest only the relevant courses including  course._id, course.title, course.description as a Json format.
+       Based on the user's query, suggest only the relevant courses including  course._id, course.title, course.description as a Json format. If no relevant records found provide an empty array.
     `;
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",

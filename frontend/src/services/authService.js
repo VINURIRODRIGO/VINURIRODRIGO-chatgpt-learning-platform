@@ -44,7 +44,7 @@ const instructorSignup = async (userData) => {
 const login = async (userData) => {
   try {
     console.log("Login Request:", userData);
-    const response = await axios.post(`${API_URL}/auth/login, userData`);
+    const response = await axios.post(`${API_URL}/auth/login`, userData);
     return response.data;
   } catch (error) {
     throw error.response?.data?.message;

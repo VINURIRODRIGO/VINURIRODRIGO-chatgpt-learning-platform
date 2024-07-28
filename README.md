@@ -83,7 +83,6 @@ This project is an online learning platform built using the MERN stack (MongoDB,
 - `express-rate-limit`: ^7.4.0
 - `express-validator`: ^7.1.0
 - `helmet`: ^7.1.0
-- `ioredis`: ^5.4.1
 - `jsonwebtoken`: ^9.0.2
 - `mongoose`: ^8.5.1
 - `openai`: ^4.52.7

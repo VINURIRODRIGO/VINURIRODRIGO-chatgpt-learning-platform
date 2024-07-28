@@ -9,10 +9,12 @@ const API_URL = process.env.REACT_APP_API_URL;
  */
 const studentSignup = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/signup/student`, userData);
+    console.log("Student Signup Request:", userData);
+    const response = await axios.post(
+      `${API_URL}/auth/signup/student, userData`
+    );
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
     throw error;
   }
 };
@@ -24,10 +26,12 @@ const studentSignup = async (userData) => {
  */
 const instructorSignup = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/signup/instructor`, userData);
+    console.log("Instructor Signup Request:", userData);
+    const response = await axios.post(
+      `${API_URL}/auth/signup/instructor, userData`
+    );
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
     throw error;
   }
 };
@@ -39,11 +43,11 @@ const instructorSignup = async (userData) => {
  */
 const login = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, userData);
+    console.log("Login Request:", userData);
+    const response = await axios.post(`${API_URL}/auth/login, userData`);
     return response.data;
   } catch (error) {
-    console.error("API Error:", error);
-    throw error;
+    throw error.response?.data?.message;
   }
 };
 

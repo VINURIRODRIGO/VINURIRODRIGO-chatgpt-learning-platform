@@ -5,6 +5,7 @@
 This project is an online learning platform built using the MERN stack (MongoDB, Express.js, React.js/Next.js, Node.js) with integration of ChatGPT to provide personalized course recommendations. The platform allows users to register, log in, enroll in courses, and receive course suggestions based on their interests.
 
 ## Table of Contents
+
 - [vinurirodrigo-chatgpt-learning-platform](#vinurirodrigo-chatgpt-learning-platform)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
@@ -22,34 +23,40 @@ This project is an online learning platform built using the MERN stack (MongoDB,
 ## Features
 
 ### Student Features
+
 - **Sign Up and Login:** Users can sign up and log in using their username and password.
 - **Course Viewing and Enrollment:** Students can view available courses, see course details, and enroll in courses.
 - **Enrolled Courses:** Students can view their list of enrolled courses.
 - **Chat-GPT Course Suggestions:** Students can enter prompts (e.g., "I want to be a software engineer, what courses should I follow") and receive a list of recommended courses.
 
 ### Instructor Features
+
 - **Sign Up and Login:** Instructors can sign up and log in using their username and password.
 - **Course Management:** Instructors can add, view, edit, and manage courses and see enrolled students' details.
 
 ### General Features
+
 - **User Authentication and Authorization:** Role-based access control (RBAC) to distinguish between students and instructors.
 - **Chat-GPT Integration:** Personalized course recommendations based on user input.
 
 ## Project Setup
 
 1. Clone the repository:
+
     ```sh
     git clone https://github.com/yourusername/vinurirodrigo-chatgpt-learning-platform.git
     cd vinurirodrigo-chatgpt-learning-platform
     ```
 
 2. Install dependencies for both client and server:
+
     ```sh
     npm run install-client
     npm run install-server
     ```
 
 3. Start the application:
+
     ```sh
     npm start
     ```

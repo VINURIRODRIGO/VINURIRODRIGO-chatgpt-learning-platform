@@ -122,11 +122,13 @@ userSchema.statics.login = async function (email, password) {
     throw new CustomErrorHandler("All fields must be filled", 400);
   }
 
+  // Check if user exists
   const user = await this.findOne({ email });
   if (!user) {
     throw new CustomErrorHandler("Incorrect email or password", 400);
   }
 
+  // Compare the password
   const passMatch = await bcrypt.compare(password, user.password);
   if (!passMatch) {
     throw new CustomErrorHandler("Incorrect email or password", 400);

@@ -1,20 +1,24 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const catchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
+const dotenv = require("dotenv");
 
-// Create a token for a user
+// Load environment variables
+dotenv.config();
+
+// Generate JWT token
 const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "3d" });
+  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN});
 };
 
-// login a user
+// Login an existing user
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.login(email, password);
 
-    // create a token
+    // Generate JWT token
     const token = createToken(user._id);
 
     res.status(200).json({ id: user._id, email, token, role: user.role });

@@ -12,6 +12,9 @@ import Input from "../components/Input";
 import Textarea from "../components/Textarea";
 import FileUpload from "../components/FileUpload";
 import Alert from "../components/Alert";
+import Loading from "../components/Loading";
+import "../index.css";
+
 const InstructorCoursesPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
@@ -24,6 +27,7 @@ const InstructorCoursesPage = () => {
   const [currentCourse, setCurrentCourse] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => {
@@ -54,6 +58,7 @@ const InstructorCoursesPage = () => {
   useEffect(() => {
     if (shouldFetchCourses) {
       const fetchCourses = async () => {
+        setLoading(true);
         try {
           const coursesData = await displayInstructorCourses();
           setCourses(coursesData);
@@ -61,6 +66,8 @@ const InstructorCoursesPage = () => {
         } catch (error) {
           setError(error || "Error fetching courses. Please try again.");
           setTimeout(() => setError(""), 3000);
+        } finally {
+          setLoading(false);
         }
       };
       fetchCourses();
@@ -159,35 +166,48 @@ const InstructorCoursesPage = () => {
   return (
     <div className="page-container">
       <Navbar />
-      <h1 style={{ fontSize: "45px", margin: "0%" }}>My Courses</h1>
-      <div className="button-left">
-        <Button type="button" onClick={openPopup}>
-          Add Course
-        </Button>
-      </div>
-      <div className="course-card-container">
-        {courses.map((course, index) => (
-          <Card key={index} title={course.title} content={course.description}>
-            <div>
-              <img
-                src={course.image}
-                alt={course.title}
-                className="card-image"
-              />
+      {loading ? (
+        <Loading message="Fetching courses..." />
+      ) : (
+        <>
+          <h1>My Courses</h1>
+          <div className="button-left">
+            <Button type="button" onClick={openPopup}>
+              Add Course
+            </Button>
+          </div>
+          {courses.length === 0 ? (
+            <div className="no-courses-message">No courses available.</div>
+          ) : (
+            <div className="course-card-container">
+              {courses.map((course, index) => (
+                <Card
+                  key={index}
+                  title={course.title}
+                  content={course.description}
+                >
+                  <div>
+                    <img
+                      src={course.image}
+                      alt={course.title}
+                      className="card-image"
+                    />
+                  </div>
+                  <div className="button-center">
+                    <Button
+                      type="button"
+                      className="edit-button"
+                      onClick={() => openEditPopup(course)}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </Card>
+              ))}
             </div>
-            <div className="button-center">
-              <Button
-                type="button"
-                className="edit-button"
-                onClick={() => openEditPopup(course)}
-              >
-                Edit
-              </Button>
-            </div>
-          </Card>
-        ))}
-      </div>
-
+          )}
+        </>
+      )}
       {isPopupOpen && (
         <Popup
           title="Add New Course"

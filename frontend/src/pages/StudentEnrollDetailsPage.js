@@ -41,19 +41,25 @@ const StudentEnrollDetailsPage = () => {
   return (
     <div className="page-container">
       <Navbar />
-      <h1>Course Enroll Details</h1>
-      {error && (
-        <Alert type="error" message={error} onClose={() => setError("")} />
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="content-container">
+          <h1>Student Enroll Details</h1>
+          {error && (
+            <Alert type="error" message={error} onClose={() => setError("")} />
+          )}
+          <div className="course-list">
+            {courses.length === 0 ? (
+              <p className="no-courses-message">No courses available.</p>
+            ) : (
+              courses.map((course, index) => (
+                <CourseRow key={index} course={course} />
+              ))
+            )}
+          </div>
+        </div>
       )}
-      <div className="course-list">
-        {loading ? (
-          <Loading />
-        ) : (
-          courses.map((course, index) => (
-            <CourseRow key={index} course={course} />
-          ))
-        )}
-      </div>
     </div>
   );
 };

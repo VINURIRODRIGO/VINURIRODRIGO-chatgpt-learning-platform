@@ -48,7 +48,7 @@ const LoginPage = () => {
         console.error("Login failed:", data.message);
       }
     } catch (error) {
-      setError(error.response?.data?.message || "An error occurred.");
+      setError(error || "An error occurred.");
     } finally {
       setLoading(false);
     }

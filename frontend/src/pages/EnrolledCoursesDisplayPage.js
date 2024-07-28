@@ -15,18 +15,14 @@ const EnrolledCoursesDisplayPage = () => {
       try {
         const userId = localStorage.getItem("userId");
         if (!userId) {
-          throw new Error("User ID not found in local storage.");
+          throw new Error("Unauthorized. Please Sign In.");
         }
 
         const allCourses = await displayStudentCourses();
-        const filteredCourses = allCourses.filter((course) =>
-          course.enrolledStudents.includes(userId)
-        );
-
-        setCourses(filteredCourses);
+        setCourses(allCourses);
         setLoading(false);
-      } catch (error) {
-        setError(error);
+      } catch (err) {
+        setError(err.message || "An error occurred.");
         setLoading(false);
         setTimeout(() => setError(""), 3000);
       }
@@ -68,7 +64,11 @@ const EnrolledCoursesDisplayPage = () => {
         ) : error ? (
           <Alert message={error} type="error" onClose={() => setError("")} />
         ) : (
-          <Table data={courses} columns={columns} />
+          <Table
+            data={courses}
+            columns={columns}
+            noDataMessage="No Courses Enrolled"
+          />
         )}
       </div>
     </div>

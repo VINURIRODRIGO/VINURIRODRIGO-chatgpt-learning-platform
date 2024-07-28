@@ -343,18 +343,14 @@ body {
 }
 
 
-/* Disabled button styling */
 .enroll-button:disabled {
   background-color: #d6d6d6;
-  /* Light gray */
   color: #a8a8a8;
-  /* Darker gray text */
   cursor: not-allowed;
 }
 
 .enroll-button:disabled:hover {
   background-color: #d6d6d6;
-  /* Ensure the background color remains unchanged */
 }
 
 /* .delete-button {
@@ -562,6 +558,13 @@ body {
   background-color: #afadad;
 }
 
+.empty-row {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin: 50%;
+}
+
 h1 {
   display: flex;
   justify-content: center;
@@ -664,18 +667,117 @@ h2 {
   border-radius: 4px;
   margin-right: 8px;
   flex: 1;
-
 }
 
 .search-button {
   padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 8px;
 }
 
-.search-button:hover {
+.submit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit-button:hover {
   background-color: #0056b3;
+}
+
+.reset-button {
+  background-color: #28a745;
+  /* Green color for reset button */
+  color: white;
+}
+
+.reset-button:hover {
+  background-color: #218838;
+}
+
+.error-boundary {
+  background: linear-gradient(135deg, #ffffff 0%, #b4b0af 99%, #af9e99 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.error-boundary h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-boundary p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.error-boundary a {
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.error-boundary a:hover {
+  text-decoration: underline;
+}
+
+.error-page {
+  background: linear-gradient(135deg, #ffffff 0%, #b4b0af 99%, #af9e99 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.error-page h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-page p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.error-page a {
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.error-page a:hover {
+  text-decoration: underline;
+}
+
+.page-container {
+  padding: 20px;
+}
+
+.button-left {
+  margin-bottom: 20px;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+}
+
+.button-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.no-courses-message {
+  margin-top: 20px;
+  padding: 20px;
+  color: #575656;
+  text-align: center;
 }

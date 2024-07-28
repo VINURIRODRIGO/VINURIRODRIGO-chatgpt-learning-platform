@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import '../index.css';
 
-const Search = ({ placeholder, onSearch }) => {
+const Search = ({ placeholder, onSearch, onReset }) => {
   const [query, setQuery] = useState("");
 
   const handleChange = (e) => {
@@ -16,6 +16,13 @@ const Search = ({ placeholder, onSearch }) => {
     }
   };
 
+  const handleReset = () => {
+    setQuery("");
+    if (onReset) {
+      onReset();
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="search-form">
       <input
@@ -25,7 +32,8 @@ const Search = ({ placeholder, onSearch }) => {
         placeholder={placeholder}
         className="search-input"
       />
-      <button type="submit" className="search-button">Search</button>
+      <button type="submit" className="search-button submit-button">Search</button>
+      <button type="button" className="search-button reset-button" onClick={handleReset}>Reset</button>
     </form>
   );
 };
@@ -33,6 +41,7 @@ const Search = ({ placeholder, onSearch }) => {
 Search.propTypes = {
   placeholder: PropTypes.string,
   onSearch: PropTypes.func.isRequired,
+  onReset: PropTypes.func.isRequired,
 };
 
 Search.defaultProps = {

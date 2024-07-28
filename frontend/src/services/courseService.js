@@ -100,8 +100,8 @@ const enrollCourse = (courseId) => {
   return new Promise((resolve, reject) => {
     axios({
       method: "post",
-      url: `${API_URL}/courses/enroll`,
-      data: { courseId },
+      url: `${API_URL}/courses/enroll/,
+      data: { courseId }`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -111,21 +111,21 @@ const enrollCourse = (courseId) => {
         resolve(response.data);
       })
       .catch((error) => {
-        console.error(
-          "API Error:",
-          error.response?.data?.error || error.message
-        );
-        reject(error.response?.data?.error || error.message);
+        const errorMessage = error.response?.data?.error || error.message;
+        console.error("API Error:", error);
+        reject(errorMessage);
+        console.log("Rejected with error:", error);
       });
   });
 };
 
 const displayStudentCourses = () => {
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   return new Promise((resolve, reject) => {
     axios({
       method: "get",
-      url: `${API_URL}/courses/enrolled`,
+      url: `${API_URL}/courses/enrolled/${userId}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -144,6 +144,28 @@ const displayStudentCourses = () => {
   });
 };
 
+const displayCourseData = (courseId) => {
+  const token = localStorage.getItem("token");
+  return new Promise((resolve, reject) => {
+    axios({
+      method: "get",
+      url: `${API_URL}/course/${courseId}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "API Error:",
+          error.response?.data?.error || error.message
+        );
+        reject(error.response?.data?.error || error.message);
+      });
+  });
+};
 export {
   addCourse,
   displayInstructorCourses,
@@ -151,4 +173,5 @@ export {
   displayAllCourses,
   editCourseDetails,
   enrollCourse,
+  displayCourseData,
 };

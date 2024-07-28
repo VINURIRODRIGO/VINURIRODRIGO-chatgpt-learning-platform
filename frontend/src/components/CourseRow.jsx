@@ -14,7 +14,6 @@ const CourseRow = ({ course }) => {
           const studentDetail = await Promise.all(
             course.enrolledStudents.map(studentId => studentDetails(studentId))
           );
-          console.log(studentDetail)
           setStudents(studentDetail);
         } catch (error) {
           console.error("Failed to fetch student details", error);

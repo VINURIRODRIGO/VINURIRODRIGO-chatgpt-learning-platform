@@ -8,39 +8,58 @@ import InstructorCoursesPage from "./pages/InstructorCoursesPage";
 import StudentCoursesPage from "./pages/StudentCoursesPage";
 import EnrolledCoursesDisplayPage from "./pages/EnrolledCoursesDisplayPage";
 import StudentEnrollDetailsPage from "./pages/StudentEnrollDetailsPage";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/student/course-list",
     element: <EnrolledCoursesDisplayPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "/student/signup",
     element: <StudentSignupPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "/",
     element: <LoginPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "instructor/course",
     element: <InstructorCoursesPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "student/course",
     element: <StudentCoursesPage />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "instructor/signup",
     element: <InstructorSignup />,
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "instructor/student-enroll-details",
     element: <StudentEnrollDetailsPage />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+        <RouterProvider router={router} />
+      </ErrorBoundary>
+    </>
+  );
 }
 
 export default App;

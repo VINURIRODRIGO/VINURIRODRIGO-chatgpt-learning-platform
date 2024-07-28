@@ -1,7 +1,7 @@
 import React from "react";
-import '../index.css';
+import "../index.css";
 
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns, noDataMessage }) => {
   return (
     <table className="table">
       <thead>
@@ -12,15 +12,23 @@ const Table = ({ data, columns }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row, rowIndex) => (
-          <tr key={rowIndex}>
-            {columns.map((column) => (
-              <td key={column.header}>
-                {column.render ? column.render(row[column.accessor]) : row[column.accessor]}
-              </td>
-            ))}
+        {data.length === 0 ? (
+          <tr>
+            <td colSpan={columns.length} className="no-data-message">
+              {noDataMessage}
+            </td>
           </tr>
-        ))}
+        ) : (
+          data.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((column) => (
+                <td key={column.header}>
+                  {column.render ? column.render(row[column.accessor]) : row[column.accessor]}
+                </td>
+              ))}
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );

@@ -20,7 +20,7 @@ const StudentSignupPage = () => {
   const {
     password,
     confirmPassword,
-    passwordMismatch,
+    passwordError,
     handlePasswordChange,
     handleConfirmPasswordChange,
   } = usePasswordValidation();
@@ -48,6 +48,11 @@ const StudentSignupPage = () => {
       return;
     }
 
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -56,13 +61,13 @@ const StudentSignupPage = () => {
     setLoading(true);
 
     try {
-      const data = await studentSignup({
+      await studentSignup({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         password: password,
       });
-      console.log(data);
+
       navigate("/", { replace: true });
     } catch (error) {
       setError(error.response?.data?.message || "An error occurred.");
@@ -124,9 +129,9 @@ const StudentSignupPage = () => {
                 value={confirmPassword}
                 onChange={handleConfirmPasswordChange}
               />
-              {passwordMismatch && (
+              {passwordError && (
                 <Alert
-                  message={passwordMismatch}
+                  message={passwordError}
                   type="error"
                   onClose={() => {}}
                 />

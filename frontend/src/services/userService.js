@@ -5,7 +5,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 const userDetails = () => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
-  console.log();
   return new Promise((resolve, reject) => {
     axios({
       method: "get",
@@ -26,7 +25,6 @@ const userDetails = () => {
 
 const studentDetails = (userId) => {
   const token = localStorage.getItem("token");
-  console.log(userId);
   return new Promise((resolve, reject) => {
     axios({
       method: "get",

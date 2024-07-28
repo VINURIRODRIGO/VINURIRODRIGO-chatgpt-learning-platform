@@ -9,6 +9,12 @@ import { instructorSignup } from "../services/authService";
 import usePasswordValidation from "../hooks/usePasswordValidation";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Instructor Signup Page
+ *
+ * Allows instructors to sign up by providing their details.
+ * This component handles form input, validation, and submission.
+ */
 const InstructorSignupPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -19,14 +25,21 @@ const InstructorSignupPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Custom hook for password validation
   const {
     password,
     confirmPassword,
-    passwordError,
+    passwordMismatch,
+    passwordStrength,
     handlePasswordChange,
     handleConfirmPasswordChange,
   } = usePasswordValidation();
 
+  /**
+   * Handles input change for form fields.
+   * @param {Event} e - The event object from the input change.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -35,6 +48,7 @@ const InstructorSignupPage = () => {
     }));
   };
 
+  // Options for teaching experience dropdown
   const experience = [
     { value: "Less than 1 year", label: "Less than 1 year" },
     { value: "1 to 3 years", label: "1 to 3 years" },
@@ -43,6 +57,10 @@ const InstructorSignupPage = () => {
     { value: "More than 10 years", label: "More than 10 years" },
   ];
 
+  /**
+   * Handles teaching experience dropdown change.
+   * @param {string} selectedRole - The selected teaching experience.
+   */
   const handleRoleChange = (selectedRole) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -50,10 +68,15 @@ const InstructorSignupPage = () => {
     }));
   };
 
+  /**
+   * Handles form submission for signup.
+   * @param {Event} e - The event object from the form submission.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    // Form validation
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -65,18 +88,19 @@ const InstructorSignupPage = () => {
       return;
     }
 
-    if (passwordError) {
-      setError(passwordError);
+    if (passwordMismatch) {
+      setError("Passwords do not match.");
       return;
     }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (passwordStrength !== "Password is strong.") {
+      setError(passwordStrength);
       return;
     }
 
     setLoading(true);
 
+    // API call for signup
     try {
       await instructorSignup({
         firstName: formData.firstName,
@@ -93,6 +117,7 @@ const InstructorSignupPage = () => {
     }
   };
 
+  // Automatically clear error after 3 seconds
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -102,6 +127,13 @@ const InstructorSignupPage = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  /**
+   * Handles the cancel button click.
+   */
+  const handleCancel = () => {
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="signin-container">
@@ -152,14 +184,21 @@ const InstructorSignupPage = () => {
                 selectedOption={formData.teachingExperience}
                 onSelect={handleRoleChange}
               />
-              {passwordError && (
+              {passwordMismatch && (
                 <Alert
-                  message={passwordError}
+                  message={passwordMismatch}
                   type="error"
                   onClose={() => {}}
                 />
               )}
+              {passwordStrength &&
+                passwordStrength !== "Password is strong." && (
+                  <p className="password-strength">{passwordStrength}</p>
+                )}
               <div className="button-center">
+                <Button type="button" onClick={handleCancel}>
+                  Cancel
+                </Button>
                 <Button type="submit">Sign Up</Button>
               </div>
               {error && (

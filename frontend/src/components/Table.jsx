@@ -1,6 +1,18 @@
 import React from "react";
 import "../index.css";
 
+/**
+ * Table Component
+ * 
+ * A reusable table component to display data.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {Array} props.data - The array of data objects to display in the table.
+ * @param {Array} props.columns - The array of column definitions.
+ * @param {string} props.noDataMessage - The message to display when there is no data.
+ * 
+ * @returns {JSX.Element} The rendered table component.
+ */
 const Table = ({ data, columns, noDataMessage }) => {
   return (
     <table className="table">

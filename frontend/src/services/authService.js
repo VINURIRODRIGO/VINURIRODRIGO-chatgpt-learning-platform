@@ -2,59 +2,49 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const studentSignup = (userData) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "post",
-      url: `${API_URL}/auth/signup/student`,
-      data: userData,
-    })
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
-  });
+/**
+ * Sign up a student user.
+ * @param {Object} userData - The user data for signup.
+ * @returns {Promise<Object>} The response data.
+ */
+const studentSignup = async (userData) => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/signup/student`, userData);
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 };
 
+/**
+ * Sign up an instructor user.
+ * @param {Object} userData - The user data for signup.
+ * @returns {Promise<Object>} The response data.
+ */
 const instructorSignup = async (userData) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "post",
-      url: `${API_URL}/auth/signup/instructor`,
-      data: userData,
-    })
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
-  });
+  try {
+    const response = await axios.post(`${API_URL}/auth/signup/instructor`, userData);
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 };
 
+/**
+ * Log in a user.
+ * @param {Object} userData - The user data for login.
+ * @returns {Promise<Object>} The response data.
+ */
 const login = async (userData) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "post",
-      url: `${API_URL}/auth/login`,
-      data: userData,
-    })
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
-  });
+  try {
+    const response = await axios.post(`${API_URL}/auth/login, userData`);
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 };
 
-export {
-  studentSignup,
-  login,
-  instructorSignup,
-};
+export { studentSignup, instructorSignup, login };

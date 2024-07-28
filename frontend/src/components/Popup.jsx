@@ -2,6 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '../index.css';
 
+/**
+ * Popup Component
+ * 
+ * A reusable popup modal component.
+ * 
+ * @param {Object} props - The properties object.
+ * @param {string} props.title - The title of the popup.
+ * @param {React.ReactNode} props.children - The content of the popup.
+ * @param {string} props.buttonText - The text for the button.
+ * @param {function} props.onButtonClick - The function to call when the button is clicked.
+ * @param {function} props.onClose - The function to call when the popup is closed.
+ * 
+ * @returns {JSX.Element} The rendered popup component.
+ */
 const Popup = ({ title, children, buttonText, onButtonClick, onClose }) => {
   return (
     <div className="popup-overlay">

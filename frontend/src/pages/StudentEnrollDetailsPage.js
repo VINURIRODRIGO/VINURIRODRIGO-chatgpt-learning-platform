@@ -5,11 +5,20 @@ import { displayInstructorCourses } from "../services/courseService";
 import Loading from "../components/Loading";
 import Alert from "../components/Alert";
 
+/**
+ * Student Enroll Details Page
+ *
+ * Displays the list of courses created by the instructor
+ * and the details of students enrolled in each course.
+ */
 const StudentEnrollDetailsPage = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  /**
+   * Fetches the courses created by the instructor on component mount.
+   */
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -17,7 +26,6 @@ const StudentEnrollDetailsPage = () => {
         setCourses(coursesData);
         setLoading(false);
       } catch (error) {
-        console.log(error);
         setError(
           error.response?.data?.message ||
             "Failed to fetch courses. Please try again."
@@ -28,6 +36,7 @@ const StudentEnrollDetailsPage = () => {
     fetchCourses();
   }, []);
 
+  // Automatically clear error after 3 seconds
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {

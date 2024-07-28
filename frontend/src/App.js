@@ -11,6 +11,9 @@ import StudentEnrollDetailsPage from "./pages/StudentEnrollDetailsPage";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ErrorPage from "./pages/ErrorPage";
 
+/**
+ * Router configuration.
+ */
 const router = createBrowserRouter([
   {
     path: "/student/course-list",
@@ -52,6 +55,14 @@ const router = createBrowserRouter([
     element: <ErrorPage />,
   },
 ]);
+
+/**
+ * Main App Component
+ *
+ * Contains the router provider wrapped with an error boundary.
+ *
+ * @returns {JSX.Element} The application component.
+ */
 function App() {
   return (
     <>

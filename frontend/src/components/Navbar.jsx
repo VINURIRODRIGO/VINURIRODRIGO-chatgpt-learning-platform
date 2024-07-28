@@ -2,21 +2,31 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../index.css';
 
+/**
+ * Navbar Component
+ * 
+ * A navigation bar component with dynamic links and a user dropdown menu.
+ * 
+ * @returns {JSX.Element} The rendered navbar component.
+ */
 const Navbar = () => {
-  const navigate = useNavigate();
-  const username = localStorage.getItem("username");
-  const role = localStorage.getItem("role");
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const navigate = useNavigate(); // Hook to programmatically navigate
+  const username = localStorage.getItem("username"); // Get username from local storage
+  const role = localStorage.getItem("role"); // Get user role from local storage
+  const [dropdownVisible, setDropdownVisible] = useState(false); // State to manage the visibility of the dropdown menu
 
+  // Function to handle user logout
   const handleLogout = () => {
     localStorage.clear();
     navigate('/');
   };
 
+  // Function to toggle the visibility of the dropdown menu
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  // Function to determine the home link based on user role
   const getHomeLink = () => {
     if (role === "instructor") {
       return "/instructor/course";
@@ -26,6 +36,7 @@ const Navbar = () => {
     return "/";
   };
 
+  // Function to determine the courses link based on user role
   const getCourseLink = () => {
     if (role === "instructor") {
       return "/instructor/student-enroll-details";

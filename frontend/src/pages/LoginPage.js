@@ -8,15 +8,26 @@ import Alert from "../components/Alert";
 import { login as loginService } from "../services/authService";
 import { userDetails } from "../services/userService";
 
+/**
+ * Login Page
+ * 
+ * Handles user login functionality.
+ */
 const LoginPage = () => {
+  // State to store form data, loading status, and error message
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
+  /**
+   * handleChange updates formData state based on user input.
+   * @param {object} e - The event object.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -25,6 +36,10 @@ const LoginPage = () => {
     }));
   };
 
+  /**
+   * handleSubmit handles the form submission for login.
+   * @param {object} e - The event object.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,10 +54,12 @@ const LoginPage = () => {
         const user = await userDetails();
         const username = `${user.firstName} ${user.lastName}`;
         localStorage.setItem("username", username);
+
+        // Navigate based on user role
         if (data.role === "instructor") {
           navigate("/instructor/course", { replace: true });
         } else if (data.role === "student") {
-          navigate("student/course", { replace: true });
+          navigate("/student/course", { replace: true });
         }
       } else {
         console.error("Login failed:", data.message);
@@ -54,6 +71,9 @@ const LoginPage = () => {
     }
   };
 
+  /**
+   * useEffect hook to clear error message after a timeout.
+   */
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {

@@ -15,7 +15,13 @@ import Alert from "../components/Alert";
 import Loading from "../components/Loading";
 import "../index.css";
 
+/**
+ * Instructor Courses Page
+ *
+ * Displays the list of courses created by the instructor and allows adding and editing courses.
+ */
 const InstructorCoursesPage = () => {
+  // State variables for managing the component's data and UI states.
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -29,7 +35,10 @@ const InstructorCoursesPage = () => {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // Function to open the "Add Course" popup.
   const openPopup = () => setIsPopupOpen(true);
+
+  // Function to close the "Add Course" popup and reset input fields.
   const closePopup = () => {
     setIsPopupOpen(false);
     setTitle("");
@@ -37,6 +46,8 @@ const InstructorCoursesPage = () => {
     setFile(null);
     setFileName("");
   };
+
+  // Function to open the "Edit Course" popup with pre-filled data.
   const openEditPopup = (course) => {
     setCurrentCourse(course);
     setTitle(course.title);
@@ -46,6 +57,7 @@ const InstructorCoursesPage = () => {
     setIsEditPopupOpen(true);
   };
 
+  // Function to close the "Edit Course" popup and reset input fields.
   const closeEditPopup = () => {
     setIsEditPopupOpen(false);
     setCurrentCourse(null);
@@ -55,6 +67,7 @@ const InstructorCoursesPage = () => {
     setFileName("");
   };
 
+  // useEffect hook to fetch the list of courses created by the instructor on component mount or when shouldFetchCourses changes.
   useEffect(() => {
     if (shouldFetchCourses) {
       const fetchCourses = async () => {
@@ -64,7 +77,9 @@ const InstructorCoursesPage = () => {
           setCourses(coursesData);
           setShouldFetchCourses(false);
         } catch (error) {
-          setError(error || "Error fetching courses. Please try again.");
+          setError(
+            error.message || "Error fetching courses. Please try again."
+          );
           setTimeout(() => setError(""), 3000);
         } finally {
           setLoading(false);
@@ -74,6 +89,7 @@ const InstructorCoursesPage = () => {
     }
   }, [shouldFetchCourses]);
 
+  // Function to handle the submission of the "Add Course" popup.
   const handlePopupButtonClick = async () => {
     if (!title || !description || !file) {
       setError("All fields are required.");
@@ -106,6 +122,7 @@ const InstructorCoursesPage = () => {
     reader.readAsDataURL(file);
   };
 
+  // Function to handle the submission of the "Edit Course" popup.
   const handleEditButtonClick = async () => {
     if (!title || !description) {
       setError("Title and description are required.");
@@ -152,10 +169,12 @@ const InstructorCoursesPage = () => {
     }
   };
 
+  // Function to handle changes in the description field.
   const handleChange = (e) => {
     setDescription(e.target.value);
   };
 
+  // Function to handle changes in the file upload field.
   const handleFileChange = (files) => {
     if (files.length > 0) {
       setFile(files[0]);
@@ -170,7 +189,7 @@ const InstructorCoursesPage = () => {
         <Loading message="Fetching courses..." />
       ) : (
         <>
-          <h1>My Courses</h1>
+          <h1>Home</h1>
           <div className="button-left">
             <Button type="button" onClick={openPopup}>
               Add Course

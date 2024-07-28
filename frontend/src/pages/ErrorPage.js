@@ -2,6 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
 
+/**
+ * Error Page
+ *
+ * Displays a 404 error message when a page is not found.
+ */
 const ErrorPage = () => {
   return (
     <div className="error-page">

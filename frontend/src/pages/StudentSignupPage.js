@@ -8,6 +8,12 @@ import Alert from "../components/Alert";
 import { studentSignup } from "../services/authService";
 import usePasswordValidation from "../hooks/usePasswordValidation";
 
+/**
+ * Student Signup Page
+ *
+ * Allows students to sign up by providing their details.
+ * This component handles form input, validation, and submission.
+ */
 const StudentSignupPage = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -17,6 +23,8 @@ const StudentSignupPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Custom hook for password validation
   const {
     password,
     confirmPassword,
@@ -25,6 +33,10 @@ const StudentSignupPage = () => {
     handleConfirmPasswordChange,
   } = usePasswordValidation();
 
+  /**
+   * Handles input change for form fields.
+   * @param {Event} e - The event object from the input change.
+   */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -33,10 +45,15 @@ const StudentSignupPage = () => {
     }));
   };
 
+  /**
+   * Handles form submission for signup.
+   * @param {Event} e - The event object from the form submission.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
+    // Form validation
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -60,6 +77,7 @@ const StudentSignupPage = () => {
 
     setLoading(true);
 
+    // API call for signup
     try {
       await studentSignup({
         firstName: formData.firstName,
@@ -76,6 +94,7 @@ const StudentSignupPage = () => {
     }
   };
 
+  // Automatically clear error after 3 seconds
   useEffect(() => {
     if (error) {
       const timer = setTimeout(() => {
@@ -85,6 +104,13 @@ const StudentSignupPage = () => {
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  /**
+   * Handles the cancel button click.
+   */
+  const handleCancel = () => {
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="signin-container">
@@ -137,6 +163,9 @@ const StudentSignupPage = () => {
                 />
               )}
               <div className="button-center">
+                <Button type="button" onClick={handleCancel}>
+                  Cancel
+                </Button>
                 <Button type="submit">Sign Up</Button>
               </div>
               {error && (

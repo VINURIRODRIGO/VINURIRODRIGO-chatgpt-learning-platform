@@ -2,44 +2,44 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const userDetails = () => {
+/**
+ * Get details of the current user.
+ * @returns {Promise<Object>} The response data.
+ */
+const userDetails = async () => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "get",
-      url: `${API_URL}/users/${userId}`,
+  try {
+    const response = await axios.get(`${API_URL}/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
-  });
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 };
 
-const studentDetails = (userId) => {
+/**
+ * Get details of a specific student.
+ * @param {string} userId - The ID of the student.
+ * @returns {Promise<Object>} The response data.
+ */
+const studentDetails = async (userId) => {
   const token = localStorage.getItem("token");
-  return new Promise((resolve, reject) => {
-    axios({
-      method: "get",
-      url: `${API_URL}/users/${userId}`,
+  try {
+    const response = await axios.get(`${API_URL}/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-        reject(error);
-      });
-  });
+    });
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
 };
+
 export { userDetails, studentDetails };

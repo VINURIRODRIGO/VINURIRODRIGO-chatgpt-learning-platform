@@ -144,7 +144,7 @@ vinurirodrigo-chatgpt-learning-platform/
 
 ## Documentation
 
-- **API Documentation:** Detailed API documentation can be found [here](https://app.swaggerhub.com/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0).
+- **API Documentation:** Detailed API documentation can be found [here](https://app.swaggerhub.com/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0) (expired in 12 days).
 - **System Architecture:** System architecture overview is available [here](docs/architecture.md).
 - **Setup Instructions:** Follow the setup instructions in the [Project Setup](#project-setup) section.
 

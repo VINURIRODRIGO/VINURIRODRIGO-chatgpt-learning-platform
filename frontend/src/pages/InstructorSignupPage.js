@@ -30,7 +30,7 @@ const InstructorSignupPage = () => {
   const {
     password,
     confirmPassword,
-    passwordMismatch,
+    passwordError,
     passwordStrength,
     handlePasswordChange,
     handleConfirmPasswordChange,
@@ -88,13 +88,13 @@ const InstructorSignupPage = () => {
       return;
     }
 
-    if (passwordMismatch) {
-      setError("Passwords do not match.");
+    if (passwordError) {
+      setError(passwordError);
       return;
     }
 
-    if (passwordStrength !== "Password is strong.") {
-      setError(passwordStrength);
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
@@ -184,9 +184,9 @@ const InstructorSignupPage = () => {
                 selectedOption={formData.teachingExperience}
                 onSelect={handleRoleChange}
               />
-              {passwordMismatch && (
+              {passwordError && (
                 <Alert
-                  message={passwordMismatch}
+                  message={passwordError}
                   type="error"
                   onClose={() => {}}
                 />

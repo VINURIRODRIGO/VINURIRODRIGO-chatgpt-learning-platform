@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { sendMessage } = require("../controllers/chatController");
 const requireAuth = require("../middleware/authMiddleware");
+const { checkRole } = require("../middleware/roleMiddleware");
 /**
  * @swagger
  * /api/chat:
@@ -37,6 +38,6 @@ const requireAuth = require("../middleware/authMiddleware");
  *         description: Server error
  */
 // Protect the route with requireAuth middleware
-router.post("/chat", requireAuth, sendMessage);
+router.post("/chat", requireAuth, checkRole(["student"]), sendMessage);
 
 module.exports = router;

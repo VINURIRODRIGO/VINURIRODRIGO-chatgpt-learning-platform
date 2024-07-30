@@ -11,7 +11,7 @@ const studentSignup = async (userData) => {
   try {
     console.log("Student Signup Request:", userData);
     const response = await axios.post(
-      `${API_URL}/auth/signup/student, userData`
+      `${API_URL}/auth/signup/student`, userData
     );
     return response.data;
   } catch (error) {

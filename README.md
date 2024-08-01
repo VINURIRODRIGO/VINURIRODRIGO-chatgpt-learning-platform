@@ -18,7 +18,6 @@ This project is an online learning platform built using the MERN stack (MongoDB,
   - [Dependencies](#dependencies)
   - [Project Structure](#project-structure)
   - [Documentation](#documentation)
-  - [License](#license)
 
 ## Features
 
@@ -44,8 +43,8 @@ This project is an online learning platform built using the MERN stack (MongoDB,
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourusername/vinurirodrigo-chatgpt-learning-platform.git
-    cd vinurirodrigo-chatgpt-learning-platform
+    git clone https://github.com/VINURIRODRIGO/VINURIRODRIGO-chatgpt-learning-platform.git
+    cd VINURIRODRIGO-chatgpt-learning-platform
     ```
 
 2. Install dependencies for both client and server:
@@ -144,9 +143,4 @@ vinurirodrigo-chatgpt-learning-platform/
 ## Documentation
 
 - **API Documentation:** Detailed API documentation can be found [here](https://app.swaggerhub.com/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0) (expired in 12 days).
-- **System Architecture:** System architecture overview is available [here](docs/architecture.md).
 - **Setup Instructions:** Follow the setup instructions in the [Project Setup](#project-setup) section.
-
-## License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.

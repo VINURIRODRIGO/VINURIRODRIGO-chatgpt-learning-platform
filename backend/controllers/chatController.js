@@ -6,7 +6,6 @@ const CatchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
 // Load environment variables
 dotenv.config();
-console.log(process.env.OPENAI_API_KEY);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -69,7 +68,7 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
         return next(error);
       }
     }
-    console.log(response);
+
     // Check for specific GPT errors
     const finishReason = response.choices[0].message.finish_reason;
     // Check if the conversation was too long for the context window

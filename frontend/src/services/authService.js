@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_API_URL;
  */
 const studentSignup = async (userData) => {
   try {
-    console.log("Student Signup Request:", userData);
+    console.log("Student Signup Request is successful");
     const response = await axios.post(
       `${API_URL}/auth/signup/student`, userData
     );
@@ -26,7 +26,7 @@ const studentSignup = async (userData) => {
  */
 const instructorSignup = async (userData) => {
   try {
-    console.log("Instructor Signup Request:", userData);
+    console.log("Instructor Signup Request is successful");
     const response = await axios.post(
       `${API_URL}/auth/signup/instructor`, userData
     );
@@ -43,7 +43,7 @@ const instructorSignup = async (userData) => {
  */
 const login = async (userData) => {
   try {
-    console.log("Login Request:", userData);
+    console.log("Login Request is successful");
     const response = await axios.post(`${API_URL}/auth/login`, userData);
     return response.data;
   } catch (error) {

@@ -23,6 +23,7 @@ const createCourse = catchAsyncError(async (req, res, next) => {
 // Fetch all courses and populate createdBy
 const getCourses = catchAsyncError(async (req, res, next) => {
   try {
+    //   createdBy should include the instructor id, firstName and lastName
     const courses = await Course.find().populate(
       "createdBy",
       "firstName lastName"
@@ -63,6 +64,7 @@ const getEnrolledCourses = catchAsyncError(async (req, res, next) => {
   const userId = req.params.id;
 
   try {
+    //   createdBy should include the instructor id, firstName and lastName
     const courses = await Course.find({ enrolledStudents: userId }).populate(
       "createdBy",
       "firstName lastName"
@@ -94,6 +96,7 @@ const getCourseById = catchAsyncError(async (req, res, next) => {
 const getCoursesByInstructor = catchAsyncError(async (req, res, next) => {
   const instructorId = req.params.id;
   try {
+    //   createdBy should include the instructor id, firstName, lastName and email address
     const courses = await Course.find({ createdBy: instructorId }).populate(
       "createdBy",
       "firstName lastName email"

@@ -41,6 +41,7 @@ const LoginPage = () => {
    * @param {object} e - The event object.
    */
   const handleSubmit = async (e) => {
+    // Prevent page refresh
     e.preventDefault();
     setLoading(true);
     setError("");

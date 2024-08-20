@@ -40,7 +40,7 @@ app.use(cookieParser());
 // Middleware for handling errors
 app.use(helmet());
 
-// Swagger configuration
+// Swagger configuration (http://localhost:5000/api-docs/)
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: "3.0.0",
@@ -74,7 +74,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Routes
+// Route handlers
 app.use("/api/auth", authRoutes);
 app.use("/api", courseRoutes);
 app.use("/api", userRoutes);

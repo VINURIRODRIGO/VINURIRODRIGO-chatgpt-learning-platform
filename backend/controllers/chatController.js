@@ -6,7 +6,7 @@ const CatchAsyncError = require("../middleware/catchAsyncErrorMiddleWare");
 
 // Load environment variables
 dotenv.config();
-
+console.log(process.env.OPENAI_API_KEY);
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -44,34 +44,35 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
       });
       apiRequestCount += 1;
     } catch (error) {
-      if (error instanceof openai.errors.APIError) {
+      if (error instanceof OpenAI.APIError) {
         return next(
           new CustomErrorHandler(
             `OpenAI API returned an API Error: ${error.message}`,
-            500
+            error.status
           )
         );
-      } else if (error instanceof openai.errors.APIConnectionError) {
+      } else if (error instanceof OpenAI.APIConnectionError) {
         return next(
           new CustomErrorHandler(
             `Failed to connect to OpenAI API: ${error.message}`,
-            500
+            error.status
           )
         );
-      } else if (error instanceof openai.errors.RateLimitError) {
+      } else if (error instanceof OpenAI.RateLimitError) {
         return next(
           new CustomErrorHandler(
             `OpenAI API request exceeded rate limit: ${error.message}`,
-            429
+            error.status
           )
         );
       } else {
         return next(error);
       }
     }
+    console.log(response);
     // Check for specific GPT errors
     const finishReason = response.choices[0].message.finish_reason;
-
+    // Check if the conversation was too long for the context window
     if (finishReason === "length") {
       return next(
         new CustomErrorHandler(
@@ -80,7 +81,7 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
         )
       );
     }
-
+    // Check if the model's output included copyright material (or similar)
     if (finishReason === "content_filter") {
       return next(
         new CustomErrorHandler(
@@ -89,15 +90,15 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
         )
       );
     }
-
+    // Check if the model has made a tool_call. This is the case either if the "finish_reason" is "tool_calls" or if the "finish_reason" is "stop" and our API request had forced a function call
     if (
       finishReason === "tool_calls" ||
       (response.ourApiRequestForcedAToolCall && finishReason === "stop")
     ) {
       return next(new CustomErrorHandler("Model made a tool call.", 400));
     }
-
-    if (finishReason == "stop") {
+    // Else finish_reason is "stop", in which case the model was just responding directly to the user
+    else if (finishReason == "stop") {
       return next(
         new CustomErrorHandler(`"Model responded directly to the user."`, 500)
       );

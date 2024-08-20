@@ -99,7 +99,7 @@ const StudentCoursesPage = () => {
       const courseDataPromises = courseIds.map((courseId) =>
         displayCourseData(courseId)
       );
-      const courseDataArray = await Promise.all(courseDataPromises);
+      const courseDataArray = await Promise.all(courseDataPromises); // fetch data for multiple courses concurrently
       const formattedCourses = courseDataArray.map((data) => ({
         _id: data.courseDetails._id,
         title: data.courseDetails.title,

@@ -97,9 +97,9 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
       return next(new CustomErrorHandler("Model made a tool call.", 400));
     }
 
-    if (finishReason !== "stop") {
+    if (finishReason == "stop") {
       return next(
-        new CustomErrorHandler(`Unexpected error: ${finishReason}`, 500)
+        new CustomErrorHandler(`"Model responded directly to the user."`, 500)
       );
     }
 
@@ -110,7 +110,7 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
 
     // Logging the token usage
     console.log(
-      `total tokens: ${response.usage.total_tokens},  prompt tokens: ${response.usage.prompt_tokens}, total tokens: ${response.usage.total_tokens}`
+      `completion tokens: ${response.usage.completion_tokens},  prompt tokens: ${response.usage.prompt_tokens}, total tokens: ${response.usage.total_tokens}`
     );
 
     // Send the reply directly without additional JSON wrapping

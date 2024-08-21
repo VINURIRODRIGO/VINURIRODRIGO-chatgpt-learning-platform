@@ -73,33 +73,14 @@ const sendMessage = CatchAsyncError(async (req, res, next) => {
     const finishReason = response.choices[0].message.finish_reason;
     // Check if the conversation was too long for the context window
     if (finishReason === "length") {
-      return next(
-        new CustomErrorHandler(
-          "The conversation was too long for the context window.",
-          400
-        )
-      );
+      // Log the error
+      console.error("The conversation was too long for the context window.");
     }
     // Check if the model's output included copyright material (or similar)
     if (finishReason === "content_filter") {
-      return next(
-        new CustomErrorHandler(
-          "The content was filtered due to policy violations.",
-          400
-        )
-      );
-    }
-    // Check if the model has made a tool_call. This is the case either if the "finish_reason" is "tool_calls" or if the "finish_reason" is "stop" and our API request had forced a function call
-    if (
-      finishReason === "tool_calls" ||
-      (response.ourApiRequestForcedAToolCall && finishReason === "stop")
-    ) {
-      return next(new CustomErrorHandler("Model made a tool call.", 400));
-    }
-    // Else finish_reason is "stop", in which case the model was just responding directly to the user
-    else if (finishReason == "stop") {
-      return next(
-        new CustomErrorHandler(`"Model responded directly to the user."`, 500)
+      console.error("Content was filtered due to policy violations.");
+      console.log(
+        "It seems the content violated policy guidelines. Please refine your request."
       );
     }
 

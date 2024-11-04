@@ -1,4 +1,4 @@
-# vinurirodrigo-chatgpt-learning-platform
+# chatgpt learning platform
 
 ## Overview
 

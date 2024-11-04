@@ -1,4 +1,4 @@
-# chatgpt learning platform
+# learning platform
 
 ## Overview
 

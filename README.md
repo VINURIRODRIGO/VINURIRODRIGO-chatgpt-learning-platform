@@ -4,7 +4,7 @@
 
 This project is an online learning platform built using the MERN stack (MongoDB, Express.js, React.js/Next.js, Node.js) with integration of ChatGPT to provide personalized course recommendations. The platform allows users to register, log in, enroll in courses, and receive course suggestions based on their interests.
 
-**Deployed Application**: https://chatgpt-learning-platform-client.vercel.app/
+**Deployed Application:** https://chatgpt-learning-platform-client.vercel.app/
 
 ## Table of Contents
 
@@ -147,3 +147,4 @@ vinurirodrigo-chatgpt-learning-platform/
 - **API Documentation:** Detailed API documentation can be found [here](https://app.swaggerhub.com/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0) (expired in 12 days).
 - **Swagger Documentation** (Local): Localhost URL: `http://localhost:5000/api-docs`
 - **Setup Instructions:** Follow the setup instructions in the [Project Setup](#project-setup) section.
+- **Project Demo:** [here](https://drive.google.com/file/d/1Cw1n6oQgDeAHpPzNn3UYWA8YdyR21FJ6/view?usp=sharing)

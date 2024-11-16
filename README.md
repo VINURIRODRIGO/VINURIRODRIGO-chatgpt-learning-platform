@@ -145,4 +145,5 @@ vinurirodrigo-chatgpt-learning-platform/
 ## Documentation
 
 - **API Documentation:** Detailed API documentation can be found [here](https://app.swaggerhub.com/apis-docs/VINURI2019753/E-ChatGPT-Learning-Platform/1.0.0) (expired in 12 days).
+- **Swagger Documentation** (Local): Localhost URL: http://localhost:5000/api-docs
 - **Setup Instructions:** Follow the setup instructions in the [Project Setup](#project-setup) section.
